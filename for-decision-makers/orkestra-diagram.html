@@ -248,12 +248,12 @@
       </div>
       <div class="content">
         <div class="tier-cap"><div class="k">ORKESTRA ŞEFİ — <b>her şeyi yöneten akıl</b></div><div class="tnote cap-tn">Katman 2 · Orchestration</div>
-          <div class="layer-desc">Tüm işi koordine eden akıl. Soruyu doğru gruba yollar, önceki konuşmaları hatırlar, kimin neyi görebileceğine karar verir ve her şeyi kayda geçirir. Kullanıcı yalnızca şefle konuşur.</div>
+          <div class="layer-desc">Tüm işi koordine eden akıl. Soruyu doğru gruba yollar (<b>Router</b>), önceki konuşmaları hatırlar (<b>Continuum</b>: memory + mediator + pgvector), kimin neyi görebileceğine karar verir (<b>Guardrails</b>: input + access + output 3 bariyer), her şeyi kayda geçirir (<b>Audit</b>), kritik kararlar için onay kuyruğunu yönetir (<b>Approval Queue</b>). Kullanıcı yalnızca şefle konuşur.</div>
         </div>
         <div class="conductor-wrap">
           <div class="halo"></div>
           <div class="conductor"><i class="ti ti-wand"></i><span class="t">Orkestra Şefi</span><span class="s">yönlendirir · hatırlar<br>yetkilendirir · kaydeder</span></div>
-          <div class="tnote conductor-tn">Router (intent dispatch) · Continuum (memory + mediator) · Guardrails (input/access/output) · Audit · Approval Queue</div>
+          <div class="tnote conductor-tn">Router · Continuum (memory + mediator + pgvector) · Guardrails (input/access/output) · Audit · Approval Queue</div>
         </div>
       </div>
     </div>
@@ -268,7 +268,7 @@
       </div>
       <div class="content">
         <div class="tier-cap"><div class="k">GRUPLAR — <b>uzmanlık alanları</b></div><div class="tnote cap-tn">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</div>
-          <div class="layer-desc">Her iş alanının uzman ekibi — İK, lojistik, finans, üretim, müşteri hizmetleri… Her grupta tek bir işi iyi yapan birden çok küçük yardımcı bulunur. Kullanıcı bu detayı görmez; şef doğru grubu çağırır.</div>
+          <div class="layer-desc">Her iş alanının ana akıl yürütücüsü — İK, lojistik, finans, üretim, müşteri hizmetleri… Her grup bir <b>Domain Agent</b>'la (Sonnet — kompleks reasoning) temsil edilir. Domain Agent kullanıcı sorusunu anlar, doğru yardımcıları (Yatay + Veri ajanları) <b>A2A</b> ile çağırır, sentez yapar. Kullanıcı bu detayı görmez; şef doğru grubu sahneye çağırır.</div>
         </div>
         <div class="row">
           <div class="node grp live"><i class="ti ti-users"></i><div class="lbl"><span class="t">İK</span><span class="pin">● İLK SAHNEDE</span></div></div>
@@ -289,23 +289,53 @@
 
     <div class="gr"><div class="info-spacer"></div><svg class="connector short reveal" viewBox="0 0 100 100" preserveAspectRatio="none" data-conn="c4"></svg></div>
 
-    <!-- ENSTRÜMANLAR -->
+    <!-- YATAY YARDIMCILAR (Horizontal Agents) -->
     <div class="gr reveal">
-      <div class="info cool">
-        <button class="info-head"><i class="ti ti-database hi"></i><span class="info-title">Enstrümanlar</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Bilginin asıl durduğu, şirketin hâlihazırda kullandığı sistemler. Bu sistemler yerinde kalır; veri kopyalanmaz. Soru sorulduğu an ilgili yerden çekilir, kullanılır, sonuç birleştirilir.</p></div>
+      <div class="info hub">
+        <button class="info-head"><i class="ti ti-puzzle hi"></i><span class="info-title">Yatay Yardımcılar</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Birden fazla domain'in ortak ihtiyacı olan capability-bazlı uzmanlar. Bir kez yazılır, tüm gruplar için ortak servis olur. Akıl burada (brain); taşıyıcılar L1 kanalda (mouth).</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">ENSTRÜMANLAR — <b>mevcut sistemler · yerinde kalır</b></div><div class="tnote cap-tn">Katman 4 · Data-Layer Agents (Haiku) + MCP server · federe erişim, ETL/ambar yok</div>
-          <div class="layer-desc">Bilginin asıl durduğu, şirketin hâlihazırda kullandığı sistemler. Bu sistemler yerinde kalır; veri kopyalanmaz. Soru sorulduğu an ilgili yerden çekilir, kullanılır, sonuç birleştirilir.</div>
+        <div class="tier-cap"><div class="k">YATAY YARDIMCILAR — <b>cross-domain capability</b></div><div class="tnote cap-tn">Horizontal Agents (Haiku) · çoklu domain tarafından çağrılır</div>
+          <div class="layer-desc">Birden fazla domain'in ortak ihtiyacı olan, capability-bazlı yardımcılar. Bir kez yazılır, tüm grupların ortak servisi olur. <b>Brain</b> burada (akıl: NE / KİME / NE ZAMAN / HANGİ KANAL); <b>mouth</b> L1 Kanalda (taşıyıcı: tek API çağrısı). Notification Agent yukarıda "kime yarın 09:00'da hatırlatma" kararını verir, L1 Bildirim Kanalı sadece mesajı iletir.</div>
+        </div>
+        <div class="row">
+          <div class="node grp"><i class="ti ti-file-text"></i><span class="t">Doküman işleme</span></div>
+          <div class="node grp"><i class="ti ti-bell-ringing"></i><span class="t">Bildirim ajanı</span></div>
+          <div class="node grp"><i class="ti ti-search"></i><span class="t">RAG / Arama</span></div>
+          <div class="node grp"><i class="ti ti-language"></i><span class="t">Çeviri</span></div>
+          <div class="node grp"><i class="ti ti-scan"></i><span class="t">OCR</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gr"><div class="info-spacer"></div><svg class="connector reveal" viewBox="0 0 100 100" preserveAspectRatio="none" data-conn="c5"></svg></div>
+
+    <!-- VERİ AJANLARI + ENSTRÜMANLAR -->
+    <div class="gr reveal">
+      <div class="info cool">
+        <button class="info-head"><i class="ti ti-database hi"></i><span class="info-title">Veri Ajanları + Enstrümanlar</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Her veri kaynağı kendi ajanıyla sarılır (Boundary Agent Doctrine). Üst sıra: Data-Layer Agent'lar — vendor başına ayrı, içeride MCP server. Alt sıra: federe veri kaynakları — yerinde kalır, kopyalanmaz.</p></div>
+      </div>
+      <div class="content">
+        <div class="tier-cap"><div class="k">VERİ AJANLARI + ENSTRÜMANLAR — <b>federe, yerinde kalır</b></div><div class="tnote cap-tn">Üst: Data-Layer Agents (Haiku) + MCP server · Alt: federe veri kaynakları (ETL/ambar yok)</div>
+          <div class="layer-desc">Her vendor için <b>ayrı bir Data-Layer Agent + ayrı MCP server</b>. Vendor protokol farklılıkları (OData, REST, SOAP, Graph) ajanın içinde encapsule. Kullanıcı tek dilden konuşur, ajan kaynağa özgü dile çevirir. <b>Federe ilke:</b> veri kaynakta kalır, kopyalanmaz, ETL/ambar yok — soru sorulduğu an çağrılır.</div>
+        </div>
+        <div class="bus" style="margin-bottom: 12px;">
+          <span class="chip"><i class="ti ti-cpu"></i> BC Agent<span class="tnote">· OData V4</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> CRM Agent<span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> SharePoint Agent<span class="tnote">· Graph</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> Snipe-IT Agent<span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> Arvento Agent<span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> QDMS Agent<span class="tnote">· SOAP / REST</span></span>
         </div>
         <div class="bus">
           <span class="chip"><i class="ti ti-box"></i> Sipariş & stok<span class="tnote">· ERP / OData V4</span></span>
           <span class="chip"><i class="ti ti-users-group"></i> CRM<span class="tnote">· REST API</span></span>
-          <span class="chip"><i class="ti ti-files"></i> Doküman arşivi<span class="tnote">· DMS API</span></span>
+          <span class="chip"><i class="ti ti-files"></i> Doküman arşivi<span class="tnote">· DMS / Graph</span></span>
           <span class="chip"><i class="ti ti-clipboard-list"></i> Envanter<span class="tnote">· REST API</span></span>
-          <span class="chip"><i class="ti ti-folder"></i> Ortak dosyalar<span class="tnote">· Graph API</span></span>
-          <span class="chip"><i class="ti ti-headset"></i> Çağrı kayıtları<span class="tnote">· REST API</span></span>
+          <span class="chip"><i class="ti ti-truck"></i> Filo telemetri<span class="tnote">· REST API</span></span>
+          <span class="chip"><i class="ti ti-checklist"></i> Kalite & uygunluk<span class="tnote">· SOAP / REST</span></span>
         </div>
       </div>
     </div>
@@ -344,13 +374,15 @@
   function getC(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
   const G12 = [4.17,12.5,20.83,29.17,37.5,45.83,54.17,62.5,70.83,79.17,87.5,95.83];
+  const G6 = [8.33,25,41.67,58.33,75,91.67];
   const CH = [16.7,50,83.3];
   const PUR='#8b80f0', BLU='#6fa8e6', WARM='#e6b860';
   const conns = {
     c1:{idx:0,pairs:CH.map(function(x){return [50,x];}),top:WARM,bot:PUR},
     c2:{idx:1,pairs:CH.map(function(x){return [x,50];}),top:WARM,bot:PUR},
-    c3:{idx:2,pairs:G12.map(function(x){return [50,x];}),top:PUR,bot:BLU},
-    c4:{idx:3,pairs:G12.map(function(x){return [x,50];}),top:PUR,bot:BLU}
+    c3:{idx:2,pairs:G12.map(function(x){return [50,x];}),top:PUR,bot:PUR},
+    c4:{idx:3,pairs:G12.map(function(x){return [x,50];}),top:PUR,bot:PUR},
+    c5:{idx:4,pairs:G6.map(function(x){return [50,x];}),top:PUR,bot:BLU}
   };
   document.querySelectorAll('.connector').forEach(function(svg){ const c=conns[svg.getAttribute('data-conn')]; if(c) buildConnector(svg,c.pairs,c.top,c.bot,c.idx); });
 
