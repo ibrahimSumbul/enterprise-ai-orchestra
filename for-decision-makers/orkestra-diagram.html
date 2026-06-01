@@ -228,12 +228,11 @@
       </div>
       <div class="content">
         <div class="tier-cap"><div class="k">KANALLAR — <b>nasıl erişilir</b></div><div class="tnote cap-tn">Katman 1 · Channel adapters (taşıyıcı, reasoning yok)</div>
-          <div class="layer-desc">Orkestraya ulaşmanın yolları. Bilgisayardan panel, telefondan sohbet, ya da sistemin kendiliğinden gönderdiği bildirim. Hepsi aynı orkestraya bağlanır — yalnızca erişim biçimi değişir.</div>
+          <div class="layer-desc">Orkestraya ulaşmanın yolları. Bilgisayardan panel veya telefondan sohbet — kullanıcının dokunduğu yüzeyler. Sistem proaktif bildirim gönderirken Yatay Yardımcılar'daki <b>Bildirim ajanı</b> kararı verir, taşıma alttaki push/mail/SMS adapter'ları üstlenir.</div>
         </div>
         <div class="row around">
           <div class="node warm"><i class="ti ti-layout-dashboard"></i><div class="lbl"><span class="t">Masaüstü panel</span><span class="s">tablo, görsel, detay</span><span class="tnote">Dashboard · Next.js RSC</span></div></div>
           <div class="node warm"><i class="ti ti-message-circle"></i><div class="lbl"><span class="t">Sohbet</span><span class="s">hızlı soru-cevap</span><span class="tnote">WhatsApp / Teams / web</span></div></div>
-          <div class="node warm"><i class="ti ti-bell"></i><div class="lbl"><span class="t">Bildirim</span><span class="s">sistem haber verir</span><span class="tnote">proaktif push · cron</span></div></div>
         </div>
       </div>
     </div>
@@ -322,12 +321,13 @@
           <div class="layer-desc">Her vendor için <b>ayrı bir Data-Layer Agent + ayrı MCP server</b>. Vendor protokol farklılıkları (OData, REST, SOAP, Graph) ajanın içinde encapsule. Kullanıcı tek dilden konuşur, ajan kaynağa özgü dile çevirir. <b>Federe ilke:</b> veri kaynakta kalır, kopyalanmaz, ETL/ambar yok — soru sorulduğu an çağrılır.</div>
         </div>
         <div class="bus" style="margin-bottom: 12px;">
-          <span class="chip"><i class="ti ti-cpu"></i> BC Agent<span class="tnote">· OData V4</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> CRM Agent<span class="tnote">· REST</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> SharePoint Agent<span class="tnote">· Graph</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> Snipe-IT Agent<span class="tnote">· REST</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> Arvento Agent<span class="tnote">· REST</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> QDMS Agent<span class="tnote">· SOAP / REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> ERP ajanı<span class="tnote">· OData V4</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> CRM ajanı<span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> Doküman ajanı<span class="tnote">· Graph</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> Envanter ajanı<span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> Telemetri ajanı<span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> Kalite ajanı<span class="tnote">· SOAP / REST</span></span>
+          <span class="chip"><i class="ti ti-dots"></i> ve diğerleri</span>
         </div>
         <div class="bus">
           <span class="chip"><i class="ti ti-box"></i> Sipariş & stok<span class="tnote">· ERP / OData V4</span></span>
@@ -375,7 +375,7 @@
 
   const G12 = [4.17,12.5,20.83,29.17,37.5,45.83,54.17,62.5,70.83,79.17,87.5,95.83];
   const G6 = [8.33,25,41.67,58.33,75,91.67];
-  const CH = [16.7,50,83.3];
+  const CH = [30,70];
   const PUR='#8b80f0', BLU='#6fa8e6', WARM='#e6b860';
   const conns = {
     c1:{idx:0,pairs:CH.map(function(x){return [50,x];}),top:WARM,bot:PUR},
