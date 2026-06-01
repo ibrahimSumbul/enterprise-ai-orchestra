@@ -64,14 +64,23 @@
 
   .map { display: flex; flex-direction: column; }
 
-  /* grid row: [info | content], connectors reuse same template */
-  /* Default: single column (info hidden) — content takes full width, perfectly centered */
+  /* grid row: content-only column — main flow is ALWAYS perfectly centered */
   .gr { display: grid; grid-template-columns: 1fr; gap: 26px; align-items: center; }
-  .info, .info-spacer { display: none; }
-  /* Tech mode: bring back the 2-column layout with info cards on the left */
-  body.tech .gr { grid-template-columns: 236px 1fr; }
-  body.tech .info { display: block; }
-  body.tech .info-spacer { display: block; }
+  /* Legacy left info column fully removed visually in both modes */
+  .info, .info-spacer { display: none !important; }
+
+  /* Inline layer description — appears under tier-cap when Tech mode is on */
+  .layer-desc {
+    display: none;
+    font-size: 13px; color: var(--ink-2); line-height: 1.6;
+    max-width: 620px; margin: 14px auto 4px;
+    text-align: center; padding: 13px 20px;
+    background: var(--glass); border: 1px solid var(--glass-bd);
+    border-radius: 12px; backdrop-filter: blur(8px);
+    animation: fadeInDesc 0.4s ease both;
+  }
+  body.tech .layer-desc { display: block; }
+  @keyframes fadeInDesc { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
   /* info card (left, collapsible) */
   .info { background: var(--glass); border: 1px solid var(--glass-bd); border-left: 3px solid var(--purple); border-radius: 13px; overflow: hidden; backdrop-filter: blur(10px); align-self: center; }
@@ -189,7 +198,7 @@
   <div class="hero">
     <div class="eyebrow reveal">Tek bakışta</div>
     <h1 class="reveal">Orkestranın haritası</h1>
-    <p class="reveal">Bir soru sorulur. Aşağıdaki her şey, görünmeden, uyum içinde çalışır ve tek bir cevap döner. Daha derin görmek için sağ üstteki <b>Teknik detay</b> düğmesine bas — katman açıklamaları ve protokol notları açılır.</p>
+    <p class="reveal">Bir soru sorulur. Aşağıdaki her şey, görünmeden, uyum içinde çalışır ve tek bir cevap döner. Daha derin görmek için sağ üstteki <b>Teknik detay</b> düğmesine bas — her katmanın altında açıklama ve protokol notları belirir, ana akış sabit kalır.</p>
     <div class="scrollcue reveal">↓ kaydır</div>
   </div>
 
@@ -202,7 +211,9 @@
         <div class="info-body"><p>Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve rol.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">KULLANICI — <b>tek soru, gündelik Türkçe</b></div><div class="tnote cap-tn">doğal dil girdisi (NL) · kimlik + rol</div></div>
+        <div class="tier-cap"><div class="k">KULLANICI — <b>tek soru, gündelik Türkçe</b></div><div class="tnote cap-tn">doğal dil girdisi (NL) · kimlik + rol</div>
+          <div class="layer-desc">Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve rol.</div>
+        </div>
         <div class="row"><div class="node warm listener"><i class="ti ti-user"></i><div class="lbl"><span class="t">Kullanıcı</span></div></div></div>
       </div>
     </div>
@@ -216,7 +227,9 @@
         <div class="info-body"><p>Orkestraya ulaşmanın yolları. Bilgisayardan panel, telefondan sohbet, ya da sistemin kendiliğinden gönderdiği bildirim. Hepsi aynı orkestraya bağlanır — yalnızca erişim biçimi değişir.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">KANALLAR — <b>nasıl erişilir</b></div><div class="tnote cap-tn">Katman 1 · Channel adapters (taşıyıcı, reasoning yok)</div></div>
+        <div class="tier-cap"><div class="k">KANALLAR — <b>nasıl erişilir</b></div><div class="tnote cap-tn">Katman 1 · Channel adapters (taşıyıcı, reasoning yok)</div>
+          <div class="layer-desc">Orkestraya ulaşmanın yolları. Bilgisayardan panel, telefondan sohbet, ya da sistemin kendiliğinden gönderdiği bildirim. Hepsi aynı orkestraya bağlanır — yalnızca erişim biçimi değişir.</div>
+        </div>
         <div class="row around">
           <div class="node warm"><i class="ti ti-layout-dashboard"></i><div class="lbl"><span class="t">Masaüstü panel</span><span class="s">tablo, görsel, detay</span><span class="tnote">Dashboard · Next.js RSC</span></div></div>
           <div class="node warm"><i class="ti ti-message-circle"></i><div class="lbl"><span class="t">Sohbet</span><span class="s">hızlı soru-cevap</span><span class="tnote">WhatsApp / Teams / web</span></div></div>
@@ -234,7 +247,9 @@
         <div class="info-body"><p>Tüm işi koordine eden akıl. Soruyu doğru gruba yollar, önceki konuşmaları hatırlar, kimin neyi görebileceğine karar verir ve her şeyi kayda geçirir. Kullanıcı yalnızca şefle konuşur.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">ORKESTRA ŞEFİ — <b>her şeyi yöneten akıl</b></div><div class="tnote cap-tn">Katman 2 · Orchestration</div></div>
+        <div class="tier-cap"><div class="k">ORKESTRA ŞEFİ — <b>her şeyi yöneten akıl</b></div><div class="tnote cap-tn">Katman 2 · Orchestration</div>
+          <div class="layer-desc">Tüm işi koordine eden akıl. Soruyu doğru gruba yollar, önceki konuşmaları hatırlar, kimin neyi görebileceğine karar verir ve her şeyi kayda geçirir. Kullanıcı yalnızca şefle konuşur.</div>
+        </div>
         <div class="conductor-wrap">
           <div class="halo"></div>
           <div class="conductor"><i class="ti ti-wand"></i><span class="t">Orkestra Şefi</span><span class="s">yönlendirir · hatırlar<br>yetkilendirir · kaydeder</span></div>
@@ -252,7 +267,9 @@
         <div class="info-body"><p>Her iş alanının uzman ekibi — İK, lojistik, finans... Her grupta tek bir işi iyi yapan birden çok küçük yardımcı bulunur. Kullanıcı bu detayı görmez; şef doğru grubu çağırır.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">GRUPLAR — <b>uzmanlık alanları</b></div><div class="tnote cap-tn">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</div></div>
+        <div class="tier-cap"><div class="k">GRUPLAR — <b>uzmanlık alanları</b></div><div class="tnote cap-tn">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</div>
+          <div class="layer-desc">Her iş alanının uzman ekibi — İK, lojistik, finans, üretim, müşteri hizmetleri… Her grupta tek bir işi iyi yapan birden çok küçük yardımcı bulunur. Kullanıcı bu detayı görmez; şef doğru grubu çağırır.</div>
+        </div>
         <div class="row">
           <div class="node grp live"><i class="ti ti-users"></i><div class="lbl"><span class="t">İK</span><span class="pin">● İLK SAHNEDE</span></div></div>
           <div class="node grp"><i class="ti ti-shopping-cart"></i><span class="t">Satın alma</span></div>
@@ -279,7 +296,9 @@
         <div class="info-body"><p>Bilginin asıl durduğu, şirketin hâlihazırda kullandığı sistemler. Bu sistemler yerinde kalır; veri kopyalanmaz. Soru sorulduğu an ilgili yerden çekilir, kullanılır, sonuç birleştirilir.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">ENSTRÜMANLAR — <b>mevcut sistemler · yerinde kalır</b></div><div class="tnote cap-tn">Katman 4 · Data-Layer Agents (Haiku) + MCP server · federe erişim, ETL/ambar yok</div></div>
+        <div class="tier-cap"><div class="k">ENSTRÜMANLAR — <b>mevcut sistemler · yerinde kalır</b></div><div class="tnote cap-tn">Katman 4 · Data-Layer Agents (Haiku) + MCP server · federe erişim, ETL/ambar yok</div>
+          <div class="layer-desc">Bilginin asıl durduğu, şirketin hâlihazırda kullandığı sistemler. Bu sistemler yerinde kalır; veri kopyalanmaz. Soru sorulduğu an ilgili yerden çekilir, kullanılır, sonuç birleştirilir.</div>
+        </div>
         <div class="bus">
           <span class="chip"><i class="ti ti-box"></i> Sipariş & stok<span class="tnote">· ERP / OData V4</span></span>
           <span class="chip"><i class="ti ti-users-group"></i> CRM<span class="tnote">· REST API</span></span>
