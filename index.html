@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enterprise AI Orchestra</title>
+  <meta name="description" content="Multi-domain AI orchestration için kavramsal mimari vision. Çoklu kanal, çoklu domain, federe veri.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --bg: #0a0a11;
+      --ink: #f3f1ec;
+      --ink-2: #b8b6c4;
+      --ink-3: #76748a;
+      --purple: #8b80f0;
+      --gold: #e6b860;
+      --glass: rgba(255,255,255,0.04);
+      --glass-bd: rgba(255,255,255,0.11);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 24px; -webkit-font-smoothing: antialiased; }
+    .bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(95px); }
+    .blob.b1 { width: 540px; height: 540px; background: radial-gradient(circle, #5142be, transparent 70%); top: -120px; left: -110px; opacity: .5; }
+    .blob.b2 { width: 480px; height: 480px; background: radial-gradient(circle, #6b5320, transparent 70%); bottom: -160px; right: -120px; opacity: .4; }
+    .wrap { position: relative; z-index: 1; max-width: 760px; width: 100%; text-align: center; }
+    .eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+    h1 { font-size: 52px; font-weight: 300; letter-spacing: -1px; margin: 0 0 18px; line-height: 1.1; background: linear-gradient(120deg, #fff 8%, var(--purple) 52%, var(--gold) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .sub { color: var(--ink-2); font-size: 18px; max-width: 600px; margin: 0 auto 42px; font-weight: 300; line-height: 1.6; }
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } h1 { font-size: 38px; } }
+    a.card { display: block; padding: 26px 22px; background: var(--glass); border: 1px solid var(--glass-bd); border-radius: 14px; text-decoration: none; color: var(--ink); backdrop-filter: blur(10px); transition: transform .25s, border-color .25s, box-shadow .25s; text-align: left; }
+    a.card:hover { transform: translateY(-3px); border-color: rgba(139,128,240,0.5); box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+    a.card .icn { font-size: 24px; color: var(--purple); margin-bottom: 10px; display: block; }
+    a.card h2 { font-size: 18px; margin: 0 0 6px; color: #fff; font-weight: 600; }
+    a.card p { font-size: 13px; color: var(--ink-3); margin: 0; line-height: 1.5; }
+    .meta { margin-top: 50px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .meta span { padding: 7px 14px; background: var(--glass); border: 1px solid var(--glass-bd); border-radius: 100px; font-size: 12px; color: var(--ink-3); display: inline-flex; align-items: center; gap: 6px; }
+    .meta span i { font-size: 14px; color: var(--purple); }
+    .foot { margin-top: 38px; font-size: 12px; color: var(--ink-3); }
+    .foot a { color: var(--purple); text-decoration: none; }
+    .foot a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<div class="wrap">
+  <div class="eyebrow">Vision · Pattern · Vision</div>
+  <h1>Enterprise AI Orchestra</h1>
+  <p class="sub">Multi-domain AI orchestration için kavramsal mimari vision. Tek tek akıllı araçlar değil, birlikte çalan bir orkestra.</p>
+
+  <div class="cards">
+    <a class="card" href="for-decision-makers/orkestra-tanitim.html">
+      <i class="ti ti-presentation icn"></i>
+      <h2>9 Slayt Tanıtım</h2>
+      <p>Karar verici için kapsamlı sunum. Scroll-snap, klavye nav, light/dark mode auto, P ile yazdır.</p>
+    </a>
+    <a class="card" href="for-decision-makers/orkestra-diagram.html">
+      <i class="ti ti-map-2 icn"></i>
+      <h2>Tek Bakışta Harita</h2>
+      <p>İnteraktif mimari diyagram — katmanları açıp kapa, "Teknik detay" toggle ile kavramsal/teknik geçiş.</p>
+    </a>
+  </div>
+
+  <div class="meta">
+    <span><i class="ti ti-license"></i> CC BY-SA 4.0</span>
+    <span><i class="ti ti-brand-github"></i> <a href="https://github.com/ibrahimSumbul/enterprise-ai-orchestra" style="color:inherit; text-decoration:none;">Repo</a></span>
+    <span><i class="ti ti-user"></i> İbrahim Sümbül</span>
+  </div>
+
+  <div class="foot">
+    <a href="https://github.com/ibrahimSumbul/enterprise-ai-orchestra/blob/main/README.md">README</a> ·
+    <a href="https://github.com/ibrahimSumbul">github.com/ibrahimSumbul</a>
+  </div>
+</div>
+
+</body>
+</html>

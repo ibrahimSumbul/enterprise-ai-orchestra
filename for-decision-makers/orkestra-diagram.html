@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orkestranın Haritası — Tek Bakışta</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #0a0a11;
+    --ink: #f3f1ec;
+    --ink-2: #b8b6c4;
+    --ink-3: #76748a;
+    --purple: #8b80f0;
+    --blue: #6fa8e6;
+    --gold: #e6b860;
+    --req: #cfc8ff;
+    --ans: #f0c873;
+    --tech: #8ea7c8;
+    --glass: rgba(255,255,255,0.04);
+    --glass-bd: rgba(255,255,255,0.11);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative; }
+
+  /* ---------- Ambient ---------- */
+  .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(95px); }
+  .blob.b1 { width: 640px; height: 640px; background: radial-gradient(circle, #5142be, transparent 70%); top: -170px; left: -130px; opacity:.55; animation: drift1 22s ease-in-out infinite; }
+  .blob.b2 { width: 580px; height: 580px; background: radial-gradient(circle, #2f5d96, transparent 70%); top: 36%; right: -190px; opacity:.5; animation: drift2 26s ease-in-out infinite; }
+  .blob.b3 { width: 540px; height: 540px; background: radial-gradient(circle, #6b5320, transparent 70%); bottom: -190px; left: 28%; opacity:.42; animation: drift3 30s ease-in-out infinite; }
+  .blob.b4 { width: 460px; height: 460px; background: radial-gradient(circle, #7d3a82, transparent 70%); top: 8%; right: 14%; opacity:.26; animation: drift1 28s ease-in-out infinite reverse; }
+  @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,40px)} }
+  @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,-30px)} }
+  @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-50px)} }
+  .vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 38%, transparent 46%, rgba(0,0,0,0.55) 100%); }
+  .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity:.5; background-image: radial-gradient(rgba(255,255,255,0.018) 1px, transparent 1px); background-size: 3px 3px; }
+  .parts { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .parts span { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: rgba(190,182,230,0.55); left: var(--x); top: var(--y); animation: float var(--d) ease-in-out infinite; animation-delay: var(--dl,0s); }
+  @keyframes float { 0%,100%{transform:translateY(0);opacity:.18} 50%{transform:translateY(-26px);opacity:.6} }
+
+  /* ---------- Tech toggle ---------- */
+  .techbtn { position: fixed; top: 20px; right: 22px; z-index: 50; cursor: pointer; background: var(--glass); border: 1px solid var(--glass-bd); color: var(--ink-2); border-radius: 100px; padding: 9px 16px; font-size: 13px; font-family: inherit; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px); transition: all .25s; }
+  .techbtn:hover { color: var(--ink); border-color: rgba(255,255,255,0.25); }
+  .techbtn i { font-size: 16px; }
+  body.tech .techbtn { color: var(--tech); border-color: rgba(142,167,200,0.55); box-shadow: 0 0 22px rgba(142,167,200,0.22); }
+  .tnote { display: none; font-size: 11px; color: var(--tech); letter-spacing:.2px; line-height: 1.4; }
+  body.tech .tnote { display: block; }
+  .cap-tn { margin-top: 5px; }
+  .chip .tnote { display: none; }
+  body.tech .chip .tnote { display: inline; margin-left: 4px; opacity:.85; }
+
+  /* ---------- Layout ---------- */
+  .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 120px; }
+  .hero { padding: 88px 0 28px; text-align: center; }
+  .hero .eyebrow { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 20px; }
+  .hero h1 { font-size: 52px; font-weight: 300; letter-spacing: -1px; margin: 0 0 18px; line-height: 1.1; background: linear-gradient(120deg, #fff 8%, var(--purple) 52%, var(--gold) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { color: var(--ink-2); font-size: 18px; max-width: 600px; margin: 0 auto; font-weight: 300; line-height: 1.6; }
+  .scrollcue { margin-top: 32px; color: var(--ink-3); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; animation: bob 2s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0);opacity:.6} 50%{transform:translateY(6px);opacity:1} }
+
+  .map { display: flex; flex-direction: column; }
+
+  /* grid row: [info | content], connectors reuse same template */
+  .gr { display: grid; grid-template-columns: 236px 1fr; gap: 26px; align-items: center; }
+
+  /* info card (left, collapsible) */
+  .info { background: var(--glass); border: 1px solid var(--glass-bd); border-left: 3px solid var(--purple); border-radius: 13px; overflow: hidden; backdrop-filter: blur(10px); align-self: center; }
+  .info.warm { border-left-color: var(--gold); }
+  .info.hub  { border-left-color: var(--purple); }
+  .info.cool { border-left-color: var(--blue); }
+  .info-head { width: 100%; text-align: left; background: none; border: none; color: var(--ink); padding: 13px 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; font: inherit; transition: background .2s; }
+  .info-head:hover { background: rgba(255,255,255,0.03); }
+  .info-head .hi { font-size: 17px; color: var(--ink-3); flex-shrink: 0; }
+  .info.warm .info-head .hi { color: var(--gold); }
+  .info.hub  .info-head .hi { color: var(--purple); }
+  .info.cool .info-head .hi { color: var(--blue); }
+  .info-title { font-size: 14px; font-weight: 600; flex: 1; }
+  .info-head .chev { font-size: 16px; color: var(--ink-3); transition: transform .3s; }
+  .info.open .info-head .chev { transform: rotate(180deg); }
+  .info-body { max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .35s ease; padding: 0 15px; }
+  .info.open .info-body { max-height: 260px; padding: 0 15px 15px; }
+  .info-body p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.55; }
+  .info-spacer { } /* empty left cell for connector rows */
+
+  /* tier content */
+  .tier-cap { text-align: center; margin-bottom: 14px; }
+  .tier-cap .k { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  .tier-cap .k b { color: var(--ink-2); font-weight: 600; }
+  .tier-cap::before { content: ""; display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--purple); margin: 0 auto 10px; box-shadow: 0 0 10px var(--purple); opacity:.7; }
+
+  .row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .row.around { justify-content: space-around; }
+  .row.spread { justify-content: space-between; }
+
+  .node { background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02)); border: 1px solid var(--glass-bd); border-radius: 16px; padding: 16px 22px; backdrop-filter: blur(10px); display: flex; align-items: center; gap: 11px; box-shadow: 0 10px 34px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
+  .node:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.28); box-shadow: 0 16px 44px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.10); }
+  .node i { font-size: 21px; }
+  .node .t { font-size: 15px; font-weight: 500; }
+  .node .s { font-size: 12px; color: var(--ink-3); }
+  .node .lbl { display: flex; flex-direction: column; line-height: 1.35; }
+  .node.warm i { color: var(--gold); }
+  .node.warm { box-shadow: 0 10px 34px rgba(0,0,0,0.38), inset 0 0 0 1px rgba(230,184,96,0.12), inset 0 1px 0 rgba(255,255,255,0.06); }
+
+  .listener { padding: 18px 32px; border-radius: 100px; }
+  .listener i { font-size: 24px; } .listener .t { font-size: 18px; }
+
+  .grp { padding: 12px 14px; border-radius: 13px; gap: 9px; }
+  .grp i { font-size: 18px; color: var(--purple); }
+  .grp .t { font-size: 13.5px; font-weight: 500; }
+  .grp.live { border-color: rgba(230,184,96,0.5); box-shadow: 0 0 26px rgba(230,184,96,0.20), inset 0 1px 0 rgba(255,255,255,0.06); }
+  .grp.live i { color: var(--gold); }
+  .grp .pin { font-size: 9px; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
+
+  /* conductor */
+  .conductor-wrap { display: flex; flex-direction: column; align-items: center; position: relative; }
+  .halo { position: absolute; top: -38px; width: 250px; height: 250px; border-radius: 50%; pointer-events: none; background: conic-gradient(from 0deg, transparent 0deg, rgba(139,128,240,0.30) 60deg, transparent 120deg, transparent 200deg, rgba(230,184,96,0.26) 260deg, transparent 320deg); filter: blur(10px); animation: spin 16s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .conductor { position: relative; width: 176px; height: 176px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: radial-gradient(circle at 50% 36%, #776bdd 0%, #463ca0 58%, #281f5e 100%); border: 1px solid rgba(186,176,255,0.5); box-shadow: 0 0 70px rgba(120,100,240,0.5), inset 0 0 34px rgba(255,255,255,0.10); z-index: 2; }
+  .conductor i { font-size: 34px; color: #fff; }
+  .conductor .t { font-size: 16px; font-weight: 600; color: #fff; line-height: 1.15; text-align: center; max-width: 130px; }
+  .conductor .s { font-size: 10px; color: rgba(255,255,255,0.72); letter-spacing:.3px; }
+  .conductor::before, .conductor::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(230,184,96,0.55); }
+  .conductor::before { animation: ring 3.2s ease-out infinite; }
+  .conductor::after { animation: ring 3.2s ease-out infinite 1.6s; }
+  @keyframes ring { 0%{transform:scale(1);opacity:.8} 100%{transform:scale(1.55);opacity:0} }
+  .conductor-tn { margin-top: 14px; text-align: center; max-width: 380px; }
+
+  .bus { background: linear-gradient(180deg, rgba(111,168,230,0.12), rgba(111,168,230,0.04)); border: 1px solid rgba(111,168,230,0.30); border-radius: 18px; padding: 18px 22px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; backdrop-filter: blur(10px); box-shadow: 0 16px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05); }
+  .bus .chip { font-size: 13px; color: var(--ink-2); padding: 7px 14px; border-radius: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); display: flex; align-items: center; gap: 7px; }
+  .bus .chip i { font-size: 15px; color: var(--blue); }
+
+  /* connectors */
+  .connector { width: 100%; height: 96px; display: block; }
+  .connector.short { height: 76px; }
+  .connector.tall { height: 112px; }
+  .wire { fill: none; stroke-width: 1.3; vector-effect: non-scaling-stroke; opacity:.45; }
+  .pulse { fill: none; stroke-width: 2.6; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 5 650; }
+  .pdown { animation: pulseDown 1.8s linear infinite; }
+  .pup { animation: pulseUp 1.8s linear infinite; }
+  @keyframes pulseDown { from{stroke-dashoffset:0} to{stroke-dashoffset:-655} }
+  @keyframes pulseUp { from{stroke-dashoffset:-655} to{stroke-dashoffset:0} }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  .legend { display: flex; gap: 26px; justify-content: center; margin-top: 54px; flex-wrap: wrap; align-items: center; }
+  .legend span { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-3); }
+  .legend .dotleg { width: 9px; height: 9px; border-radius: 50%; }
+  .foot { text-align: center; margin-top: 36px; color: var(--ink-2); font-size: 16px; font-weight: 300; max-width: 640px; margin: 36px auto 0; line-height: 1.6; }
+  .foot b { color: var(--ink); font-weight: 600; }
+  .foot .tnote { margin-top: 12px; text-align: center; }
+
+  @media (max-width: 860px) {
+    .gr { grid-template-columns: 1fr; gap: 12px; }
+    .info-spacer { display: none; }
+    .info { align-self: stretch; }
+    .hero h1 { font-size: 36px; } .hero { padding: 60px 0 20px; }
+    .conductor { width: 150px; height: 150px; } .halo { width: 214px; height: 214px; }
+    .node { padding: 13px 16px; } .row { gap: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="parts">
+  <span style="--x:10%;--y:24%;--d:9s"></span><span style="--x:88%;--y:30%;--d:11s;--dl:1s"></span>
+  <span style="--x:22%;--y:60%;--d:8s;--dl:.5s"></span><span style="--x:76%;--y:66%;--d:12s;--dl:2s"></span>
+  <span style="--x:40%;--y:14%;--d:10s;--dl:1.5s"></span><span style="--x:62%;--y:82%;--d:9.5s;--dl:.8s"></span>
+  <span style="--x:14%;--y:84%;--d:13s;--dl:2.4s"></span>
+</div>
+
+<button class="techbtn" id="techToggle"><i class="ti ti-code"></i> Teknik detay</button>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow reveal">Tek bakışta</div>
+    <h1 class="reveal">Orkestranın haritası</h1>
+    <p class="reveal">Bir soru sorulur. Aşağıdaki her şey, görünmeden, uyum içinde çalışır ve tek bir cevap döner. Soldaki kutucuklara tıklayarak her katmanı açabilirsin.</p>
+    <div class="scrollcue reveal">↓ kaydır</div>
+  </div>
+
+  <div class="map">
+
+    <!-- KULLANICI -->
+    <div class="gr reveal">
+      <div class="info warm">
+        <button class="info-head"><i class="ti ti-user hi"></i><span class="info-title">Kullanıcı</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve rol.</p></div>
+      </div>
+      <div class="content">
+        <div class="tier-cap"><div class="k">KULLANICI — <b>tek soru, gündelik Türkçe</b></div><div class="tnote cap-tn">doğal dil girdisi (NL) · kimlik + rol</div></div>
+        <div class="row"><div class="node warm listener"><i class="ti ti-user"></i><div class="lbl"><span class="t">Kullanıcı</span></div></div></div>
+      </div>
+    </div>
+
+    <div class="gr"><div class="info-spacer"></div><svg class="connector short reveal" viewBox="0 0 100 100" preserveAspectRatio="none" data-conn="c1"></svg></div>
+
+    <!-- KANALLAR -->
+    <div class="gr reveal">
+      <div class="info warm">
+        <button class="info-head"><i class="ti ti-broadcast hi"></i><span class="info-title">Kanallar</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Orkestraya ulaşmanın yolları. Bilgisayardan panel, telefondan sohbet, ya da sistemin kendiliğinden gönderdiği bildirim. Hepsi aynı orkestraya bağlanır — yalnızca erişim biçimi değişir.</p></div>
+      </div>
+      <div class="content">
+        <div class="tier-cap"><div class="k">KANALLAR — <b>nasıl erişilir</b></div><div class="tnote cap-tn">Katman 1 · Channel adapters (taşıyıcı, reasoning yok)</div></div>
+        <div class="row around">
+          <div class="node warm"><i class="ti ti-layout-dashboard"></i><div class="lbl"><span class="t">Masaüstü panel</span><span class="s">tablo, görsel, detay</span><span class="tnote">Dashboard · Next.js RSC</span></div></div>
+          <div class="node warm"><i class="ti ti-message-circle"></i><div class="lbl"><span class="t">Sohbet</span><span class="s">hızlı soru-cevap</span><span class="tnote">WhatsApp / Teams / web</span></div></div>
+          <div class="node warm"><i class="ti ti-bell"></i><div class="lbl"><span class="t">Bildirim</span><span class="s">sistem haber verir</span><span class="tnote">proaktif push · cron</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gr"><div class="info-spacer"></div><svg class="connector reveal" viewBox="0 0 100 100" preserveAspectRatio="none" data-conn="c2"></svg></div>
+
+    <!-- ORKESTRA ŞEFİ -->
+    <div class="gr reveal">
+      <div class="info hub">
+        <button class="info-head"><i class="ti ti-wand hi"></i><span class="info-title">Orkestra Şefi</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Tüm işi koordine eden akıl. Soruyu doğru gruba yollar, önceki konuşmaları hatırlar, kimin neyi görebileceğine karar verir ve her şeyi kayda geçirir. Kullanıcı yalnızca şefle konuşur.</p></div>
+      </div>
+      <div class="content">
+        <div class="tier-cap"><div class="k">ORKESTRA ŞEFİ — <b>her şeyi yöneten akıl</b></div><div class="tnote cap-tn">Katman 2 · Orchestration</div></div>
+        <div class="conductor-wrap">
+          <div class="halo"></div>
+          <div class="conductor"><i class="ti ti-wand"></i><span class="t">Orkestra Şefi</span><span class="s">yönlendirir · hatırlar<br>yetkilendirir · kaydeder</span></div>
+          <div class="tnote conductor-tn">Router (intent dispatch) · Continuum (memory + mediator) · Guardrails (input/access/output) · Audit · Approval Queue</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gr"><div class="info-spacer"></div><svg class="connector tall reveal" viewBox="0 0 100 100" preserveAspectRatio="none" data-conn="c3"></svg></div>
+
+    <!-- GRUPLAR -->
+    <div class="gr reveal">
+      <div class="info hub">
+        <button class="info-head"><i class="ti ti-users-group hi"></i><span class="info-title">Gruplar</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Her iş alanının uzman ekibi — İK, lojistik, finans... Her grupta tek bir işi iyi yapan birden çok küçük yardımcı bulunur. Kullanıcı bu detayı görmez; şef doğru grubu çağırır.</p></div>
+      </div>
+      <div class="content">
+        <div class="tier-cap"><div class="k">GRUPLAR — <b>uzmanlık alanları</b></div><div class="tnote cap-tn">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</div></div>
+        <div class="row spread">
+          <div class="node grp live"><i class="ti ti-users"></i><div class="lbl"><span class="t">İK</span><span class="pin">● İLK SAHNEDE</span></div></div>
+          <div class="node grp"><i class="ti ti-shopping-cart"></i><span class="t">Satın alma</span></div>
+          <div class="node grp"><i class="ti ti-stack-2"></i><span class="t">Talep & stok</span></div>
+          <div class="node grp"><i class="ti ti-truck-delivery"></i><span class="t">Lojistik</span></div>
+          <div class="node grp"><i class="ti ti-checklist"></i><span class="t">Kalite</span></div>
+          <div class="node grp"><i class="ti ti-businessplan"></i><span class="t">Satış</span></div>
+          <div class="node grp"><i class="ti ti-chart-bar"></i><span class="t">Karar destek</span></div>
+          <div class="node grp"><i class="ti ti-coin"></i><span class="t">Finans</span></div>
+          <div class="node grp"><i class="ti ti-tools"></i><span class="t">Üretim & op.</span></div>
+          <div class="node grp"><i class="ti ti-headset"></i><span class="t">Müşteri hizmetleri</span></div>
+          <div class="node grp"><i class="ti ti-speakerphone"></i><span class="t">Pazarlama</span></div>
+          <div class="node grp"><i class="ti ti-device-desktop"></i><span class="t">BT / iç sistemler</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gr"><div class="info-spacer"></div><svg class="connector short reveal" viewBox="0 0 100 100" preserveAspectRatio="none" data-conn="c4"></svg></div>
+
+    <!-- ENSTRÜMANLAR -->
+    <div class="gr reveal">
+      <div class="info cool">
+        <button class="info-head"><i class="ti ti-database hi"></i><span class="info-title">Enstrümanlar</span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p>Bilginin asıl durduğu, şirketin hâlihazırda kullandığı sistemler. Bu sistemler yerinde kalır; veri kopyalanmaz. Soru sorulduğu an ilgili yerden çekilir, kullanılır, sonuç birleştirilir.</p></div>
+      </div>
+      <div class="content">
+        <div class="tier-cap"><div class="k">ENSTRÜMANLAR — <b>mevcut sistemler · yerinde kalır</b></div><div class="tnote cap-tn">Katman 4 · Data-Layer Agents (Haiku) + MCP server · federe erişim, ETL/ambar yok</div></div>
+        <div class="bus">
+          <span class="chip"><i class="ti ti-box"></i> Sipariş & stok<span class="tnote">· ERP / OData V4</span></span>
+          <span class="chip"><i class="ti ti-users-group"></i> CRM<span class="tnote">· REST API</span></span>
+          <span class="chip"><i class="ti ti-files"></i> Doküman arşivi<span class="tnote">· DMS API</span></span>
+          <span class="chip"><i class="ti ti-clipboard-list"></i> Envanter<span class="tnote">· REST API</span></span>
+          <span class="chip"><i class="ti ti-folder"></i> Ortak dosyalar<span class="tnote">· Graph API</span></span>
+          <span class="chip"><i class="ti ti-headset"></i> Çağrı kayıtları<span class="tnote">· REST API</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="legend reveal">
+    <span><span class="dotleg" style="background:var(--req)"></span> Soru — içeri</span>
+    <span><span class="dotleg" style="background:var(--ans)"></span> Cevap — geri</span>
+    <span class="tnote">A2A (agent↔agent) · Service call (Continuum/Audit)</span>
+  </div>
+
+  <p class="foot reveal">Veri kopyalanmaz, taşınmaz. Soru sorulduğu an çağrılır, birleştirilir, kullanıcıya <b>tek bir cevap</b> olarak döner. Tek tek araçlar değil — <b>birlikte çalan bir orkestra.</b>
+    <span class="tnote">Federe mimari: kaynaklar yerinde; her sorgu A2A + service call zinciriyle anlık çözülür. Merkezi veri ambarı / ETL yoktur.</span>
+  </p>
+
+</div>
+
+<script>
+  const NS = 'http://www.w3.org/2000/svg';
+  function buildConnector(svg, pairs, cTop, cBot, idx) {
+    const gid = 'g' + Math.random().toString(36).slice(2, 8);
+    const defs = document.createElementNS(NS, 'defs');
+    const lg = document.createElementNS(NS, 'linearGradient');
+    lg.setAttribute('id', gid); lg.setAttribute('x1','0'); lg.setAttribute('y1','0'); lg.setAttribute('x2','0'); lg.setAttribute('y2','1');
+    [[0,cTop],[1,cBot]].forEach(function(st){ const s=document.createElementNS(NS,'stop'); s.setAttribute('offset',st[0]); s.setAttribute('stop-color',st[1]); lg.appendChild(s); });
+    defs.appendChild(lg); svg.appendChild(defs);
+    const reqDelay = (idx*0.18).toFixed(2), ansDelay = (0.9+(3-idx)*0.18).toFixed(2);
+    pairs.forEach(function(pr){
+      const d = 'M ' + pr[0] + ' 2 C ' + pr[0] + ' 50, ' + pr[1] + ' 50, ' + pr[1] + ' 98';
+      const wire = document.createElementNS(NS,'path'); wire.setAttribute('d',d); wire.setAttribute('class','wire'); wire.setAttribute('stroke','url(#'+gid+')'); svg.appendChild(wire);
+      const down = document.createElementNS(NS,'path'); down.setAttribute('d',d); down.setAttribute('class','pulse pdown'); down.setAttribute('stroke',getC('--req')); down.style.animationDelay=reqDelay+'s'; svg.appendChild(down);
+      const up = document.createElementNS(NS,'path'); up.setAttribute('d',d); up.setAttribute('class','pulse pup'); up.setAttribute('stroke',getC('--ans')); up.style.animationDelay=ansDelay+'s'; svg.appendChild(up);
+    });
+  }
+  function getC(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  const G12 = [4.17,12.5,20.83,29.17,37.5,45.83,54.17,62.5,70.83,79.17,87.5,95.83];
+  const CH = [16.7,50,83.3];
+  const PUR='#8b80f0', BLU='#6fa8e6', WARM='#e6b860';
+  const conns = {
+    c1:{idx:0,pairs:CH.map(function(x){return [50,x];}),top:WARM,bot:PUR},
+    c2:{idx:1,pairs:CH.map(function(x){return [x,50];}),top:WARM,bot:PUR},
+    c3:{idx:2,pairs:G12.map(function(x){return [50,x];}),top:PUR,bot:BLU},
+    c4:{idx:3,pairs:G12.map(function(x){return [x,x];}),top:PUR,bot:BLU}
+  };
+  document.querySelectorAll('.connector').forEach(function(svg){ const c=conns[svg.getAttribute('data-conn')]; if(c) buildConnector(svg,c.pairs,c.top,c.bot,c.idx); });
+
+  // Info card accordions
+  document.querySelectorAll('.info-head').forEach(function(h){
+    h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+  });
+
+  // Tech toggle
+  document.getElementById('techToggle').addEventListener('click', function(){ document.body.classList.toggle('tech'); });
+
+  // Scroll reveal
+  const items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.14 });
+    items.forEach(function(el){ io.observe(el); });
+  } else { items.forEach(function(el){ el.classList.add('in'); }); }
+</script>
+
+</body>
+</html>
