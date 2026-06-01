@@ -247,7 +247,7 @@
       </div>
       <div class="content">
         <div class="tier-cap"><div class="k">GRUPLAR — <b>uzmanlık alanları</b></div><div class="tnote cap-tn">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</div></div>
-        <div class="row spread">
+        <div class="row">
           <div class="node grp live"><i class="ti ti-users"></i><div class="lbl"><span class="t">İK</span><span class="pin">● İLK SAHNEDE</span></div></div>
           <div class="node grp"><i class="ti ti-shopping-cart"></i><span class="t">Satın alma</span></div>
           <div class="node grp"><i class="ti ti-stack-2"></i><span class="t">Talep & stok</span></div>
@@ -325,7 +325,7 @@
     c1:{idx:0,pairs:CH.map(function(x){return [50,x];}),top:WARM,bot:PUR},
     c2:{idx:1,pairs:CH.map(function(x){return [x,50];}),top:WARM,bot:PUR},
     c3:{idx:2,pairs:G12.map(function(x){return [50,x];}),top:PUR,bot:BLU},
-    c4:{idx:3,pairs:G12.map(function(x){return [x,x];}),top:PUR,bot:BLU}
+    c4:{idx:3,pairs:G12.map(function(x){return [x,50];}),top:PUR,bot:BLU}
   };
   document.querySelectorAll('.connector').forEach(function(svg){ const c=conns[svg.getAttribute('data-conn')]; if(c) buildConnector(svg,c.pairs,c.top,c.bot,c.idx); });
 
