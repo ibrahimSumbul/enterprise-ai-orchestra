@@ -65,7 +65,13 @@
   .map { display: flex; flex-direction: column; }
 
   /* grid row: [info | content], connectors reuse same template */
-  .gr { display: grid; grid-template-columns: 236px 1fr; gap: 26px; align-items: center; }
+  /* Default: single column (info hidden) — content takes full width, perfectly centered */
+  .gr { display: grid; grid-template-columns: 1fr; gap: 26px; align-items: center; }
+  .info, .info-spacer { display: none; }
+  /* Tech mode: bring back the 2-column layout with info cards on the left */
+  body.tech .gr { grid-template-columns: 236px 1fr; }
+  body.tech .info { display: block; }
+  body.tech .info-spacer { display: block; }
 
   /* info card (left, collapsible) */
   .info { background: var(--glass); border: 1px solid var(--glass-bd); border-left: 3px solid var(--purple); border-radius: 13px; overflow: hidden; backdrop-filter: blur(10px); align-self: center; }
@@ -183,7 +189,7 @@
   <div class="hero">
     <div class="eyebrow reveal">Tek bakışta</div>
     <h1 class="reveal">Orkestranın haritası</h1>
-    <p class="reveal">Bir soru sorulur. Aşağıdaki her şey, görünmeden, uyum içinde çalışır ve tek bir cevap döner. Soldaki kutucuklara tıklayarak her katmanı açabilirsin.</p>
+    <p class="reveal">Bir soru sorulur. Aşağıdaki her şey, görünmeden, uyum içinde çalışır ve tek bir cevap döner. Daha derin görmek için sağ üstteki <b>Teknik detay</b> düğmesine bas — katman açıklamaları ve protokol notları açılır.</p>
     <div class="scrollcue reveal">↓ kaydır</div>
   </div>
 
