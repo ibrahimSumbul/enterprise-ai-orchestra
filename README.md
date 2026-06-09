@@ -9,6 +9,10 @@
 
 Bu repo bir **kavramsal mimari vision** sunar — kod değil, fikir. Modern kurumsal AI'ın temel sorunu: tek tek akıllı araçlar **birlikte uyumlu** çalışmıyor. Bir orkestrayı orkestra yapan müzisyenler değil — **şef**.
 
+> **Public-safe not:** Bu çalışma kişisel olarak hazırlanmış, vendor-neutral bir referans mimaridir. Herhangi bir şirket verisi, iç sistem detayı, müşteri bilgisi veya kuruma özel implementation bilgisi içermez.
+
+**English summary:** Enterprise AI Orchestra is a conceptual, vendor-neutral reference architecture for multi-domain AI orchestration across enterprise channels, domain agents, and federated data sources. It is not an implementation repository; public scope is limited to architecture and system design.
+
 ## İki Görsel
 
 | Doküman | Hedef kitle | Açıklama |
@@ -36,7 +40,7 @@ Bu repo, "agentic orchestration" üzerine kapsamlı bir mimari deseni görselle�
 3. **Üç tip agent** — Domain (Sonnet) · Horizontal (Haiku) · Data-Layer (Haiku + MCP server)
 4. **Dört protokol** — Direct tool · MCP · A2A · Service call
 5. **Continuum** — Memory + Mediator unified (cross-channel coordination, tek modül)
-6. **KVKK/GDPR-grade audit** — sonradan eklenmiş özellik değil, mimarinin parçası
+6. **KVKK/GDPR-aware auditability** — sonradan eklenmiş özellik değil, mimarinin parçası
 7. **Capability-based model routing** — domain reasoning Sonnet'te, retrieval/data Haiku'da
 
 ## Bu Repo **Ne Değil**?
@@ -44,6 +48,7 @@ Bu repo, "agentic orchestration" üzerine kapsamlı bir mimari deseni görselle�
 - **Kod değil.** Implementation reference değil. (Hazır bir SaaS aramıyorsan, bu bir startup pitch'i değil.)
 - **Müşteri-spesifik değil.** Generic kurumsal mimari, herhangi bir sektör/şirket adı yok.
 - **Ürün belgesi değil.** Düşünce dokümanı + paylaşım için cilalı vision artifact.
+- **Kuruma özel uygulama detayı içermez.** Gerçek şirket verisi, iç sistem adı, entegrasyon detayı veya operasyonel bilgi paylaşılmaz.
 
 ## Hızlı Başlangıç
 
@@ -96,4 +101,4 @@ Mimari vision dokümanları için CC-BY-SA klasik bir tercih: fikrin yayılması
 - LinkedIn: [linkedin.com/in/ibrahim-sümbül](https://www.linkedin.com/in/ibrahim-s%C3%BCmb%C3%BCl-838800300)
 - Email: ibrahimsumbulll@gmail.com
 
-> Bu pattern üzerine çalışan implementation **özel R&D**. Architecture deck ve engineering deep-dive talebe açık — iletişim için bağlantılar yukarıda.
+> Bu pattern üzerine private implementation keşifleri ayrı yürütülür; public repo yalnızca generic mimari yaklaşımı ve sistem tasarımı kapsamını paylaşır. Architecture deck ve engineering deep-dive talebe açık — iletişim için bağlantılar yukarıda.
