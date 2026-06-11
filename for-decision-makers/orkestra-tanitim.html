@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bir orkestra gibi — Tanıtım</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --bg-2: #f4f3ee;
+    --bg-3: #ebeae0;
+    --text: #2c2c2a;
+    --text-2: #5f5e5a;
+    --text-3: #908f88;
+    --border: rgba(0,0,0,0.12);
+    --border-2: rgba(0,0,0,0.28);
+    --accent: #534AB7;
+    --accent-light: #EEEDFE;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --gold: #B07D1E;
+    --gold-light: #F7EED7;
+    --rose: #B25A5A;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg-2: #272725;
+      --bg-3: #2f2e29;
+      --text: #f1efe8;
+      --text-2: #d3d1c7;
+      --text-3: #908f88;
+      --border: rgba(255,255,255,0.14);
+      --border-2: rgba(255,255,255,0.30);
+      --accent: #AFA9EC;
+      --accent-light: #3C3489;
+      --blue: #85B7EB;
+      --blue-light: #0C447C;
+      --gold: #E0B65C;
+      --gold-light: #463713;
+      --rose: #D98A8A;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+    scroll-behavior: smooth;
+  }
+
+  .slide {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    padding: 64px 80px 88px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .slide-num {
+    position: absolute;
+    top: 28px;
+    right: 34px;
+    font-size: 11px;
+    color: var(--text-3);
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow i { font-size: 15px; }
+
+  h1 {
+    font-size: 44px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+  }
+  h2 {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0 0 18px;
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+  }
+  h3 { font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+
+  p { margin: 0 0 14px; color: var(--text-2); max-width: 760px; }
+  p.lead { font-size: 19px; color: var(--text); max-width: 800px; line-height: 1.5; }
+  strong { color: var(--text); font-weight: 600; }
+
+  .divider { height: 1px; background: var(--border); margin: 24px 0 28px; border: none; }
+
+  /* ---------- Cover ---------- */
+  .cover h1 { font-size: 58px; margin-bottom: 20px; }
+  .cover .subtitle { font-size: 20px; color: var(--text-2); max-width: 720px; line-height: 1.5; }
+  .cover .meta {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 40px;
+  }
+  .cover .meta span {
+    padding: 9px 16px; background: var(--bg-2); border: 0.5px solid var(--border);
+    border-radius: 100px; font-size: 13.5px; color: var(--text-2);
+    display: flex; align-items: center; gap: 7px;
+  }
+  .cover .meta span i { color: var(--accent); font-size: 16px; }
+
+  .baton {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--gold); font-size: 13px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 22px;
+  }
+  .baton i { font-size: 19px; }
+
+  /* ---------- Compare boxes ---------- */
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+  .cols-2 > div { min-width: 0; }
+  .compare { background: var(--bg-2); border-radius: 16px; padding: 24px 26px; }
+  .compare-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-3); margin-bottom: 10px; font-weight: 600;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .compare h3 { margin-top: 0; }
+  .compare p { font-size: 14.5px; }
+  .compare.neg { border-left: 3px solid var(--rose); }
+  .compare.neg .compare-label i { color: var(--rose); }
+  .compare.pos { border-left: 3px solid var(--accent); }
+  .compare.pos .compare-label i { color: var(--accent); }
+
+  /* ---------- Callouts ---------- */
+  .callout {
+    border-radius: 14px; padding: 20px 24px; margin: 22px 0 0;
+    font-size: 15.5px; line-height: 1.6;
+    background: var(--accent-light); color: var(--accent);
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .callout i { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+  .callout strong { color: inherit; }
+  .callout.gold { background: var(--gold-light); color: var(--gold); }
+  .callout.big { font-size: 18px; font-weight: 500; padding: 26px 30px; }
+
+  /* ---------- Orchestra stage diagram ---------- */
+  .stage {
+    margin: 18px auto 6px; width: 100%; max-width: 760px;
+    display: flex; flex-direction: column; gap: 0; position: relative;
+  }
+  .band { position: relative; padding: 4px 0; }
+  .band-cap {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 1.4px;
+    font-weight: 700; color: var(--text-3); margin-bottom: 8px; text-align: center;
+  }
+  .band-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .seat {
+    padding: 8px 14px; border-radius: 100px; font-size: 13px;
+    background: var(--bg-2); border: 0.5px solid var(--border); color: var(--text-2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .seat i { font-size: 14px; color: var(--text-3); }
+  .seat.group { background: var(--accent-light); border-color: transparent; color: var(--accent); font-weight: 500; }
+  .seat.group i { color: var(--accent); }
+  .conductor-pill, .listener-pill {
+    margin: 0 auto; padding: 13px 26px; border-radius: 100px;
+    display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 16px;
+  }
+  .conductor-pill { background: var(--accent); color: #fff; box-shadow: 0 6px 20px rgba(83,74,183,0.28); }
+  .listener-pill { background: var(--gold); color: #fff; box-shadow: 0 6px 20px rgba(176,125,30,0.28); }
+  @media (prefers-color-scheme: dark) {
+    .conductor-pill { color: #1c1c1a; }
+    .listener-pill { color: #1c1c1a; }
+  }
+  .conductor-pill i, .listener-pill i { font-size: 19px; }
+  .spine { width: 2px; height: 22px; background: var(--border-2); margin: 6px auto; border-radius: 2px; }
+  .spine-row { display: flex; justify-content: center; }
+
+  /* ---------- Mapping rows (conductor jobs) ---------- */
+  .maps { display: flex; flex-direction: column; gap: 2px; margin-top: 14px; }
+  .map {
+    display: grid; grid-template-columns: 44px 1fr; gap: 16px;
+    padding: 16px 0; border-bottom: 0.5px solid var(--border); align-items: start;
+  }
+  .map:last-child { border-bottom: none; }
+  .map-ico {
+    width: 44px; height: 44px; border-radius: 12px; background: var(--accent-light);
+    display: flex; align-items: center; justify-content: center; color: var(--accent);
+  }
+  .map-ico i { font-size: 22px; }
+  .map h3 { margin: 0 0 3px; font-size: 16px; }
+  .map p { margin: 0; font-size: 14.5px; }
+
+  /* ---------- Domain grid (4×3 with 12 cards) ---------- */
+  .grid8 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0; }
+  .gcard {
+    padding: 16px 16px 14px; background: var(--bg-2); border-radius: 14px;
+    border-top: 3px solid var(--border-2);
+  }
+  .gcard i { font-size: 22px; color: var(--text-3); margin-bottom: 8px; display: block; }
+  .gcard h3 { font-size: 14.5px; margin: 0 0 3px; }
+  .gcard p { font-size: 12.5px; margin: 0; line-height: 1.45; }
+
+  /* ---------- Flow steps ---------- */
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 8px 0 4px; align-items: stretch; }
+  .step {
+    background: var(--bg-2); border-radius: 14px; padding: 18px 16px; position: relative;
+    border-top: 3px solid var(--accent);
+  }
+  .step .n {
+    font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .step h3 { font-size: 14.5px; margin: 0 0 4px; }
+  .step p { font-size: 12.5px; margin: 0; line-height: 1.45; }
+
+  /* ---------- Chat mock ---------- */
+  .chat {
+    margin-top: 20px; max-width: 560px; background: var(--bg-2);
+    border-radius: 18px; padding: 18px; border: 0.5px solid var(--border);
+  }
+  .bubble { padding: 12px 16px; border-radius: 16px; font-size: 14.5px; margin-bottom: 10px; max-width: 85%; line-height: 1.5; }
+  .bubble.me { background: var(--accent); color: #fff; margin-left: auto; border-bottom-right-radius: 5px; }
+  .bubble.bot { background: var(--bg); border: 0.5px solid var(--border); color: var(--text); border-bottom-left-radius: 5px; }
+  @media (prefers-color-scheme: dark) { .bubble.me { color: #1c1c1a; } }
+  .bubble.bot b { color: var(--accent); font-weight: 600; }
+  .chat-note { font-size: 12px; color: var(--text-3); margin: 4px 2px 0; text-align: center; }
+
+  /* ---------- Trust cards ---------- */
+  .trust { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 18px 0 0; }
+  .tcard { background: var(--bg-2); border-radius: 14px; padding: 20px; }
+  .tcard i { font-size: 26px; color: var(--accent); margin-bottom: 10px; display: block; }
+  .tcard h3 { font-size: 15.5px; margin: 0 0 5px; }
+  .tcard p { font-size: 13.5px; margin: 0; line-height: 1.5; }
+
+  /* ---------- Progress list ---------- */
+  .prog { list-style: none; padding: 0; margin: 10px 0 0; max-width: 720px; }
+  .prog li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 0.5px solid var(--border); }
+  .prog li:last-child { border-bottom: none; }
+  .prog .dot {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex;
+    align-items: center; justify-content: center; font-size: 15px;
+  }
+  .prog .done { background: var(--gold-light); color: var(--gold); }
+  .prog .wip { background: var(--accent-light); color: var(--accent); }
+  .prog .next { background: var(--bg-3); color: var(--text-3); }
+  .prog .ptext { font-size: 15px; color: var(--text-2); }
+  .prog .ptext b { color: var(--text); }
+
+  /* ---------- Nav ---------- */
+  .nav-hint {
+    position: fixed; bottom: 22px; right: 26px; font-size: 11px; color: var(--text-3);
+    background: var(--bg-2); padding: 7px 13px; border-radius: 100px; z-index: 100;
+    opacity: 0.7; transition: opacity 0.3s; border: 0.5px solid var(--border);
+  }
+  .nav-hint:hover { opacity: 1; }
+  .indicators { position: fixed; right: 26px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 9px; z-index: 100; }
+  .indicators a { display: block; width: 9px; height: 9px; border-radius: 50%; background: var(--border-2); transition: all 0.2s; }
+  .indicators a.active { background: var(--accent); transform: scale(1.35); }
+  .indicators a:hover { background: var(--accent); }
+
+  @media print {
+    html, body { background: white; color: black; height: auto; }
+    .deck { overflow: visible; height: auto; scroll-snap-type: none; }
+    .slide { page-break-after: always; min-height: auto; padding: 32px 44px; max-width: none; justify-content: flex-start; }
+    .slide:last-child { page-break-after: auto; }
+    .nav-hint, .indicators { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    .slide { padding: 48px 28px 72px; }
+    .cols-2, .grid8, .flow, .trust { grid-template-columns: 1fr; }
+    .cover h1 { font-size: 38px; }
+    h2 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ===== SLIDE 1 — COVER ===== -->
+<section class="slide cover" id="s1">
+  <div class="slide-num">01 / 09</div>
+  <div class="baton"><i class="ti ti-wand"></i> Tanıtım</div>
+  <h1>Dağınık araçlar değil,<br>bir orkestra</h1>
+  <p class="subtitle">Şirketin birbirinden kopuk dijital sistemlerine, gündelik Türkçeyle <strong>tek bir yerden</strong> soru sormanı sağlayan bir yapı. Arkada onlarca parça çalışır; önde tek bir şef her şeyi uyum içinde tutar.</p>
+  <div class="meta">
+    <span><i class="ti ti-message-circle"></i> Sıradan dille sor</span>
+    <span><i class="ti ti-layout-grid"></i> Tek yerden eriş</span>
+    <span><i class="ti ti-wand"></i> Arka planda otomatik koordinasyon</span>
+  </div>
+</section>
+
+<!-- ===== SLIDE 2 — PROBLEM ===== -->
+<section class="slide" id="s2">
+  <div class="slide-num">02 / 09</div>
+  <div class="eyebrow"><i class="ti ti-alert-triangle"></i> Bugünkü durum</div>
+  <h2>Her araç kendi başına çalıyor</h2>
+  <p class="lead">Bugün her iş için ayrı bir uygulama, ayrı bir şifre, ayrı bir ekran var. Hiçbiri diğeriyle konuşmuyor — ve hiçbiri az önce ne konuştuğunu hatırlamıyor.</p>
+
+  <div class="cols-2" style="margin-top: 22px;">
+    <div class="compare neg">
+      <div class="compare-label"><i class="ti ti-volume-3"></i> Şefsiz sahne</div>
+      <h3>Dört solist, dört farklı şarkı</h3>
+      <p>Dört müzisyeni aynı sahneye koy, ama başlarında şef olmasın. Her biri kendi parçasını, kendi temposunda çalar. Sonuç müzik değil — gürültü.</p>
+    </div>
+    <div class="compare neg">
+      <div class="compare-label"><i class="ti ti-arrows-shuffle"></i> Gündelik karşılığı</div>
+      <h3>Dört ayrı yerde arama</h3>
+      <p>Bir bilgi için bir sistem, başka bir bilgi için başkası. Hangisinde ne olduğunu sen takip edersin. Birinde başladığın konuyu diğerine kendin taşırsın.</p>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <i class="ti ti-bulb"></i>
+    <div>Tek tek akıllı olmak yetmez. Asıl mesele <strong>birlikte uyumlu olmak</strong>. Bir orkestrayı orkestra yapan, müzisyenler değil — aralarındaki uyum.</div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 3 — THE IDEA (HERO DIAGRAM) ===== -->
+<section class="slide" id="s3">
+  <div class="slide-num">03 / 09</div>
+  <div class="eyebrow"><i class="ti ti-bulb"></i> Fikir</div>
+  <h2>Ya hepsini bir orkestraya koysak?</h2>
+  <p class="lead">Aynı parçaları bir araya getir, başlarına bir şef koy. Artık dinleyici tek bir uyumlu müzik duyar — arkadaki karmaşayı değil.</p>
+
+  <div class="stage">
+    <div class="band">
+      <div class="band-cap">Enstrümanlar — şirketin mevcut sistemleri</div>
+      <div class="band-row">
+        <span class="seat"><i class="ti ti-box"></i> Sipariş & stok</span>
+        <span class="seat"><i class="ti ti-truck"></i> Filo takip</span>
+        <span class="seat"><i class="ti ti-files"></i> Doküman arşivi</span>
+        <span class="seat"><i class="ti ti-clipboard-list"></i> Envanter</span>
+      </div>
+    </div>
+    <div class="spine-row"><div class="spine"></div></div>
+    <div class="band">
+      <div class="band-cap">Gruplar — uzmanlık alanları</div>
+      <div class="band-row">
+        <span class="seat group"><i class="ti ti-users"></i> İK</span>
+        <span class="seat group"><i class="ti ti-tools"></i> Üretim</span>
+        <span class="seat group"><i class="ti ti-coin"></i> Finans</span>
+        <span class="seat group"><i class="ti ti-dots"></i> ve diğerleri</span>
+      </div>
+    </div>
+    <div class="spine-row"><div class="spine"></div></div>
+    <div class="band" style="text-align:center;">
+      <div class="band-cap">Şef — her şeyi yöneten akıl</div>
+      <div class="conductor-pill"><i class="ti ti-wand"></i> Şef</div>
+    </div>
+    <div class="spine-row"><div class="spine"></div></div>
+    <div class="band" style="text-align:center;">
+      <div class="band-cap">Sen — tek bir soru</div>
+      <div class="listener-pill"><i class="ti ti-user"></i> Sen</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <i class="ti ti-arrow-up"></i>
+    <div>Sen sadece <strong>şefle</strong> konuşursun. O, doğru grupları çağırır; gruplar kendi enstrümanlarından sesi çıkarır. Sen aşağıdan tek bir müzik duyarsın.</div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 4 — THE CONDUCTOR ===== -->
+<section class="slide" id="s4">
+  <div class="slide-num">04 / 09</div>
+  <div class="eyebrow"><i class="ti ti-wand"></i> Şef</div>
+  <h2>Orkestrayı bir arada tutan akıl</h2>
+  <p class="lead">Sen sadece şefle konuşursun; gerisini o halleder. Aynı anda dört işi birden yapar:</p>
+
+  <div class="maps">
+    <div class="map">
+      <div class="map-ico"><i class="ti ti-route"></i></div>
+      <div>
+        <h3>Doğru grubu sahneye çağırır</h3>
+        <p>Sorduğun şeyi, o konunun uzmanına yönlendirir. Sen "kime sorayım?" diye düşünmezsin.</p>
+      </div>
+    </div>
+    <div class="map">
+      <div class="map-ico"><i class="ti ti-history"></i></div>
+      <div>
+        <h3>Tüm provayı hatırlar</h3>
+        <p>Önceki konuşmaları aklında tutar. Sabah bilgisayarda başladığın konu, akşam telefonda kaldığı yerden devam eder.</p>
+      </div>
+    </div>
+    <div class="map">
+      <div class="map-ico"><i class="ti ti-shield-check"></i></div>
+      <div>
+        <h3>Kimin neyi çalacağına izin verir</h3>
+        <p>Herkes her bilgiyi göremez. Şef, senin rolüne göre neye erişebileceğine karar verir.</p>
+      </div>
+    </div>
+    <div class="map">
+      <div class="map-ico"><i class="ti ti-microphone-2"></i></div>
+      <div>
+        <h3>Konseri kaydeder</h3>
+        <p>Kim ne sordu, ne yanıt aldı — hepsi kayıt altında. Güven ve yasal uyum için.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 5 — DOMAINS ===== -->
+<section class="slide" id="s5">
+  <div class="slide-num">05 / 09</div>
+  <div class="eyebrow"><i class="ti ti-users-group"></i> Gruplar</div>
+  <h2>Her uzmanlık alanı bir grup</h2>
+  <p class="lead">Bir orkestrada yaylılar, üflemeliler, vurmalılar vardır. Burada da her iş alanı kendi grubu — ve her grupta birden çok müzisyen çalışır.</p>
+
+  <div class="grid8">
+    <div class="gcard"><i class="ti ti-users"></i><h3>İç bilgi & İK</h3><p>Çalışan, aday, prosedür</p></div>
+    <div class="gcard"><i class="ti ti-shopping-cart"></i><h3>Satın alma</h3><p>Tedarikçi, sipariş</p></div>
+    <div class="gcard"><i class="ti ti-stack-2"></i><h3>Talep & stok</h3><p>Ne kadar var, ne lazım</p></div>
+    <div class="gcard"><i class="ti ti-truck-delivery"></i><h3>Lojistik</h3><p>Sevkiyat, rota, takip</p></div>
+    <div class="gcard"><i class="ti ti-checklist"></i><h3>Kalite</h3><p>Denetim, uygunluk</p></div>
+    <div class="gcard"><i class="ti ti-businessplan"></i><h3>Satış</h3><p>Müşteri, sipariş, iade</p></div>
+    <div class="gcard"><i class="ti ti-chart-bar"></i><h3>Karar destek</h3><p>Özet, gösterge, sapma</p></div>
+    <div class="gcard"><i class="ti ti-coin"></i><h3>Finans</h3><p>Tahsilat, risk</p></div>
+    <div class="gcard"><i class="ti ti-tools"></i><h3>Üretim & operasyon</h3><p>Hat, vardiya, OEE</p></div>
+    <div class="gcard"><i class="ti ti-headset"></i><h3>Müşteri hizmetleri</h3><p>Talep, çağrı, çözüm</p></div>
+    <div class="gcard"><i class="ti ti-speakerphone"></i><h3>Pazarlama</h3><p>Kampanya, segment</p></div>
+    <div class="gcard"><i class="ti ti-device-desktop"></i><h3>BT / iç sistemler</h3><p>Talep, varlık, lisans</p></div>
+  </div>
+
+  <div class="callout">
+    <i class="ti ti-plus"></i>
+    <div>Yeni bir grup eklemek, baştan yeni bir orkestra kurmak değil — <strong>sahneye bir grup daha katmak</strong>. Şef, hafıza, yetki, kayıt zaten hazır.</div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 6 — MUSICIANS & INSTRUMENTS ===== -->
+<section class="slide" id="s6">
+  <div class="slide-num">06 / 09</div>
+  <div class="eyebrow"><i class="ti ti-music"></i> Müzisyenler ve enstrümanlar</div>
+  <h2>Sen müziği duyarsın, mekaniği değil</h2>
+
+  <div class="cols-2" style="margin-top: 14px;">
+    <div class="compare pos">
+      <div class="compare-label"><i class="ti ti-user-cog"></i> Müzisyenler</div>
+      <h3>Her biri tek işi çok iyi yapar</h3>
+      <p>Her grupta küçük yardımcılar var. Biri belge okur, biri hatırlatma gönderir, biri sistemden veri çeker. Hepsi birlikte çalışır ama sen tek tek onları görmezsin.</p>
+    </div>
+    <div class="compare pos">
+      <div class="compare-label"><i class="ti ti-music"></i> Enstrümanlar</div>
+      <h3>Ses, mevcut sistemlerden gelir</h3>
+      <p>Asıl bilgi, şirketin zaten kullandığı sistemlerde durur — sipariş sistemi, CRM, doküman arşivi, envanter. Müzisyen kendi enstrümanını çalar; sen sonucu duyarsın.</p>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <i class="ti ti-lock-check"></i>
+    <div><strong>Önemli:</strong> Bu sistemler yerinde kalır. Veri kopyalanmaz, taşınmaz, tek bir dev depoya yığılmaz. Soru sorulduğu an çağrılır, kullanılır. Sen sadece birleşmiş, anlamlı sonucu görürsün.</div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 7 — HOW IT WORKS ===== -->
+<section class="slide" id="s7">
+  <div class="slide-num">07 / 09</div>
+  <div class="eyebrow"><i class="ti ti-player-play"></i> Nasıl çalışır</div>
+  <h2>Bir soru, tek bir cevap</h2>
+  <p class="lead">Sen tek cümle yazarsın. Arkada birden fazla sistem konuşur. Bunu fark etmezsin bile.</p>
+
+  <div class="flow">
+    <div class="step"><div class="n">1</div><h3>Sen sorarsın</h3><p>Sıradan Türkçeyle, tek cümle.</p></div>
+    <div class="step"><div class="n">2</div><h3>Şef yönlendirir</h3><p>Doğru grupları sahneye çağırır.</p></div>
+    <div class="step"><div class="n">3</div><h3>Müzisyenler çalar</h3><p>Kendi sistemlerinden bilgiyi okur.</p></div>
+    <div class="step"><div class="n">4</div><h3>Tek cevap döner</h3><p>Şef hepsini birleştirir, sana sunar.</p></div>
+  </div>
+
+  <div class="chat">
+    <div class="bubble me">Bu ay geç kalan siparişler hangileri?</div>
+    <div class="bubble bot">Bu ay <b>3 sipariş</b> gecikti. En kritik olan <b>2 gün</b> gecikmede ve müşteriye henüz bilgi verilmemiş. İstersen ilgili ekibe hatırlatma göndereyim.</div>
+  </div>
+  <p class="chat-note">↑ Tek soru. Arkada sipariş sistemi + takip + hatırlatma birlikte çalıştı.</p>
+</section>
+
+<!-- ===== SLIDE 8 — TRUST ===== -->
+<section class="slide" id="s8">
+  <div class="slide-num">08 / 09</div>
+  <div class="eyebrow"><i class="ti ti-shield-check"></i> Güven</div>
+  <h2>Herkes her notayı çalamaz</h2>
+  <p class="lead">Güçlü bir sistem, aynı zamanda güvenli olmak zorunda. Bu, sonradan eklenen bir özellik değil — şefin işinin parçası.</p>
+
+  <div class="trust">
+    <div class="tcard">
+      <i class="ti ti-key"></i>
+      <h3>Yetki</h3>
+      <p>Rolüne göre erişim. Bir ekip yöneticisi kendi ekibini görür; herkes her şeyi göremez.</p>
+    </div>
+    <div class="tcard">
+      <i class="ti ti-notebook"></i>
+      <h3>Kayıt</h3>
+      <p>Her soru ve yanıt kayıt altında. Bir sorun olursa geriye dönüp tam olarak ne olduğuna bakılabilir.</p>
+    </div>
+    <div class="tcard">
+      <i class="ti ti-lock"></i>
+      <h3>Gizlilik</h3>
+      <p>Kişisel veri işleme, KVKK/GDPR-aware guardrail'ler ve gerektiğinde maskeleme adımlarıyla tasarlanır.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <i class="ti ti-shield-check"></i>
+    <div>Tek bir yerden erişim, aynı zamanda <strong>tek bir yerden denetim</strong> demek. Dağınık sistemlerde imkânsız olan şey burada doğal.</div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 9 — WHERE WE ARE / CLOSE ===== -->
+<section class="slide" id="s9">
+  <div class="slide-num">09 / 09</div>
+  <div class="eyebrow"><i class="ti ti-compass"></i> Kapsam</div>
+  <h2>Bu bir uygulama planı değil, mimari desen</h2>
+  <p class="lead">Görseldeki alanlar temsilidir. Amaç bir domain seçimi veya uygulama planı önermek değil; farklı uzmanlık alanlarının aynı orkestrasyon katmanına nasıl bağlanabileceğini göstermektir.</p>
+
+  <ul class="prog">
+    <li>
+      <span class="dot wip"><i class="ti ti-scale"></i></span>
+      <span class="ptext"><b>Domain'ler temsilidir:</b> İK, finans, lojistik veya kalite gibi başlıklar örnek alanlardır; belirli bir kurum yol haritası veya uygulama planı ifade etmez.</span>
+    </li>
+    <li>
+      <span class="dot wip"><i class="ti ti-bolt"></i></span>
+      <span class="ptext"><b>Orkestrasyon katmanı ortaktır:</b> Routing, hafıza, yetki, denetim kaydı ve onay mekanizmaları domain'lerden bağımsız ortak prensiplerle çalışır.</span>
+    </li>
+    <li>
+      <span class="dot wip"><i class="ti ti-coin"></i></span>
+      <span class="ptext"><b>Genişleme modülerdir:</b> Yeni bir domain eklemek, tüm yapıyı yeniden kurmak değil; aynı güvenlik ve denetlenebilirlik çerçevesine yeni bir uzmanlık alanı bağlamaktır.</span>
+    </li>
+  </ul>
+
+  <div class="callout gold big" style="margin-top: 30px;">
+    <i class="ti ti-wand"></i>
+    <div>Fikir basit: <strong>tek tek akıllı araçlar değil, birlikte çalan bir orkestra.</strong> Domain'ler değişebilir; asıl sabit kalan şey orkestrasyon, guardrails, kayıt ve insan onayı yaklaşımıdır.</div>
+  </div>
+</section>
+
+</div>
+
+<div class="nav-hint">↓ Aşağı kaydır veya ok tuşları · <kbd>P</kbd> yazdır</div>
+
+<div class="indicators" id="indicators">
+  <a href="#s1"></a><a href="#s2"></a><a href="#s3"></a><a href="#s4"></a>
+  <a href="#s5"></a><a href="#s6"></a><a href="#s7"></a><a href="#s8"></a><a href="#s9"></a>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const indicators = document.querySelectorAll('.indicators a');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        indicators.forEach(function(ind) {
+          ind.classList.toggle('active', ind.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(function(s) { observer.observe(s); });
+
+  document.addEventListener('keydown', function(e) {
+    const current = Array.from(slides).findIndex(function(s) {
+      const rect = s.getBoundingClientRect();
+      return rect.top >= -100 && rect.top < window.innerHeight / 2;
+    });
+    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      if (current < slides.length - 1) slides[current + 1].scrollIntoView();
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (current > 0) slides[current - 1].scrollIntoView();
+    } else if (e.key === 'p' || e.key === 'P') {
+      window.print();
+    }
+  });
+</script>
+
+</body>
+</html>
