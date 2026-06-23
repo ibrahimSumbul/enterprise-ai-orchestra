@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bir orkestra gibi — Tanıtım</title>
+<title data-title-tr="Bir orkestra gibi — Tanıtım" data-title-en="Like an orchestra — Walkthrough">Bir orkestra gibi — Tanıtım</title>
+<!-- No-FOUC dil seçimi: ?lang → localStorage → navigator.language. Boyamadan önce html.en'i ayarlar. -->
+<script>
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search).get('lang');
+      var s = localStorage.getItem('eao-lang');
+      var lang = (q === 'en' || q === 'tr') ? q
+        : (s === 'en' || s === 'tr') ? s
+        : ((navigator.language || 'tr').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en');
+      var d = document.documentElement;
+      d.classList.toggle('en', lang === 'en');
+      d.setAttribute('lang', lang);
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
 <style>
   :root {
@@ -295,130 +310,177 @@
     .cover h1 { font-size: 38px; }
     h2 { font-size: 26px; }
   }
+
+  /* ---------- Dil değiştirici (TR ⇄ EN) ---------- */
+  /* JS yoksa varsayılan = TR; EN gizli kalır. Kurallar print'te de geçerli (tek dil basılır). */
+  html:not(.en) [data-lang="en"] { display: none; }
+  html.en       [data-lang="tr"] { display: none; }
+  .langbtn {
+    position: fixed; top: 22px; left: 26px; z-index: 110;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 7px 13px; border-radius: 100px;
+    background: var(--bg-2); border: 0.5px solid var(--border); color: var(--text-2);
+    font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .5px;
+    cursor: pointer; transition: border-color .2s, color .2s, transform .2s;
+  }
+  .langbtn:hover { color: var(--text); border-color: var(--accent); transform: translateY(-1px); }
+  .langbtn i { font-size: 15px; color: var(--accent); }
+  @media print { .langbtn { display: none; } }
 </style>
 </head>
 <body>
+
+<button class="langbtn" id="langToggle" type="button" aria-label="Switch language / Dili değiştir">
+  <i class="ti ti-language" aria-hidden="true"></i><span data-lang="tr">EN</span><span data-lang="en">TR</span>
+</button>
 
 <div class="deck" id="deck">
 
 <!-- ===== SLIDE 1 — COVER ===== -->
 <section class="slide cover" id="s1">
   <div class="slide-num">01 / 09</div>
-  <div class="baton"><i class="ti ti-wand"></i> Tanıtım</div>
-  <h1>Dağınık araçlar değil,<br>bir orkestra</h1>
-  <p class="subtitle">Şirketin birbirinden kopuk dijital sistemlerine, gündelik Türkçeyle <strong>tek bir yerden</strong> soru sormanı sağlayan bir yapı. Arkada onlarca parça çalışır; önde tek bir şef her şeyi uyum içinde tutar.</p>
-  <div class="meta">
-    <span><i class="ti ti-message-circle"></i> Sıradan dille sor</span>
+  <div class="baton"><i class="ti ti-wand"></i> <span data-lang="tr">Tanıtım</span><span data-lang="en">Walkthrough</span></div>
+  <h1 data-lang="tr">Dağınık araçlar değil,<br>bir orkestra</h1>
+  <h1 data-lang="en">Not scattered tools,<br>but an orchestra</h1>
+  <p class="subtitle" data-lang="tr">Şirketin birbirinden kopuk dijital sistemlerine, gündelik Türkçeyle ve <strong>tek bir yerden</strong> soru sormanı sağlayan bir yapı. Arkada onlarca parça çalar; önde tek bir şef hepsini uyum içinde tutar.</p>
+  <p class="subtitle" data-lang="en">A structure that lets you query your company's disconnected digital systems in plain language, <strong>from one place</strong>. Behind the scenes, dozens of parts play at once; up front, a single conductor holds it all in harmony.</p>
+  <div class="meta" data-lang="tr">
+    <span><i class="ti ti-message-circle"></i> Gündelik dille sor</span>
     <span><i class="ti ti-layout-grid"></i> Tek yerden eriş</span>
     <span><i class="ti ti-wand"></i> Arka planda otomatik koordinasyon</span>
+  </div>
+  <div class="meta" data-lang="en">
+    <span><i class="ti ti-message-circle"></i> Ask in plain language</span>
+    <span><i class="ti ti-layout-grid"></i> Reach it from one place</span>
+    <span><i class="ti ti-wand"></i> Automatic coordination behind the scenes</span>
   </div>
 </section>
 
 <!-- ===== SLIDE 2 — PROBLEM ===== -->
 <section class="slide" id="s2">
   <div class="slide-num">02 / 09</div>
-  <div class="eyebrow"><i class="ti ti-alert-triangle"></i> Bugünkü durum</div>
-  <h2>Her araç kendi başına çalıyor</h2>
-  <p class="lead">Bugün her iş için ayrı bir uygulama, ayrı bir şifre, ayrı bir ekran var. Hiçbiri diğeriyle konuşmuyor — ve hiçbiri az önce ne konuştuğunu hatırlamıyor.</p>
+  <div class="eyebrow"><i class="ti ti-alert-triangle"></i> <span data-lang="tr">Bugünkü durum</span><span data-lang="en">Today's reality</span></div>
+  <h2 data-lang="tr">Her araç kendi başına çalıyor</h2>
+  <h2 data-lang="en">Every tool plays on its own</h2>
+  <p class="lead" data-lang="tr">Her iş için ayrı uygulama, ayrı şifre, ayrı ekran. Hiçbiri diğeriyle konuşmuyor — ve hiçbiri az önce ne konuştuğunu hatırlamıyor.</p>
+  <p class="lead" data-lang="en">Today every task has its own app, its own password, its own screen. None of them talk to each other — and none of them remember what you just said.</p>
 
   <div class="cols-2" style="margin-top: 22px;">
     <div class="compare neg">
-      <div class="compare-label"><i class="ti ti-volume-3"></i> Şefsiz sahne</div>
-      <h3>Dört solist, dört farklı şarkı</h3>
-      <p>Dört müzisyeni aynı sahneye koy, ama başlarında şef olmasın. Her biri kendi parçasını, kendi temposunda çalar. Sonuç müzik değil — gürültü.</p>
+      <div class="compare-label"><i class="ti ti-volume-3"></i> <span data-lang="tr">Şefsiz sahne</span><span data-lang="en">A stage with no conductor</span></div>
+      <h3 data-lang="tr">Dört solist, dört farklı şarkı</h3>
+      <h3 data-lang="en">Four soloists, four different songs</h3>
+      <p data-lang="tr">Dört müzisyeni aynı sahneye çıkar, başlarında şef olmasın. Her biri kendi parçasını, kendi temposunda çalar. Çıkan ses müzik değil — gürültü.</p>
+      <p data-lang="en">Put four musicians on the same stage, but with no conductor. Each plays their own piece at their own tempo. The result isn't music — it's noise.</p>
     </div>
     <div class="compare neg">
-      <div class="compare-label"><i class="ti ti-arrows-shuffle"></i> Gündelik karşılığı</div>
-      <h3>Dört ayrı yerde arama</h3>
-      <p>Bir bilgi için bir sistem, başka bir bilgi için başkası. Hangisinde ne olduğunu sen takip edersin. Birinde başladığın konuyu diğerine kendin taşırsın.</p>
+      <div class="compare-label"><i class="ti ti-arrows-shuffle"></i> <span data-lang="tr">Gündelik karşılığı</span><span data-lang="en">What that looks like day to day</span></div>
+      <h3 data-lang="tr">Dört ayrı yerde arama</h3>
+      <h3 data-lang="en">Searching in four separate places</h3>
+      <p data-lang="tr">Bir bilgi bir sistemde, başka bir bilgi bambaşkasında. Neyin nerede olduğunu sen takip edersin; birinde başladığın konuyu diğerine yine sen taşırsın.</p>
+      <p data-lang="en">One system for one piece of information, another for the next. You keep track of what lives where. A topic you start in one, you carry to the next yourself.</p>
     </div>
   </div>
 
   <div class="callout gold">
     <i class="ti ti-bulb"></i>
-    <div>Tek tek akıllı olmak yetmez. Asıl mesele <strong>birlikte uyumlu olmak</strong>. Bir orkestrayı orkestra yapan, müzisyenler değil — aralarındaki uyum.</div>
+    <div data-lang="tr">Tek tek akıllı olmak yetmez. Asıl mesele <strong>birlikte uyumlu olmak</strong>. Bir orkestrayı orkestra yapan, müzisyenler değil — aralarındaki uyum.</div>
+    <div data-lang="en">Being individually smart isn't enough. What matters is <strong>playing in harmony</strong>. What makes an orchestra an orchestra isn't the musicians — it's the harmony between them.</div>
   </div>
 </section>
 
 <!-- ===== SLIDE 3 — THE IDEA (HERO DIAGRAM) ===== -->
 <section class="slide" id="s3">
   <div class="slide-num">03 / 09</div>
-  <div class="eyebrow"><i class="ti ti-bulb"></i> Fikir</div>
-  <h2>Ya hepsini bir orkestraya koysak?</h2>
-  <p class="lead">Aynı parçaları bir araya getir, başlarına bir şef koy. Artık dinleyici tek bir uyumlu müzik duyar — arkadaki karmaşayı değil.</p>
+  <div class="eyebrow"><i class="ti ti-bulb"></i> <span data-lang="tr">Fikir</span><span data-lang="en">The idea</span></div>
+  <h2 data-lang="tr">Ya hepsini bir orkestraya koysak?</h2>
+  <h2 data-lang="en">What if we put them all in one orchestra?</h2>
+  <p class="lead" data-lang="tr">Aynı parçaları bir araya getir, başlarına bir şef koy. Artık dinleyici tek bir uyumlu müzik duyar — arkadaki karmaşayı değil.</p>
+  <p class="lead" data-lang="en">Bring the same parts together and put a conductor in front of them. Now the listener hears a single, harmonious piece of music — not the complexity behind it.</p>
 
   <div class="stage">
     <div class="band">
-      <div class="band-cap">Enstrümanlar — şirketin mevcut sistemleri</div>
+      <div class="band-cap"><span data-lang="tr">Enstrümanlar — şirketin mevcut sistemleri</span><span data-lang="en">Instruments — the company's existing systems</span></div>
       <div class="band-row">
-        <span class="seat"><i class="ti ti-box"></i> Sipariş & stok</span>
-        <span class="seat"><i class="ti ti-truck"></i> Filo takip</span>
-        <span class="seat"><i class="ti ti-files"></i> Doküman arşivi</span>
-        <span class="seat"><i class="ti ti-clipboard-list"></i> Envanter</span>
+        <span class="seat"><i class="ti ti-box"></i> <span data-lang="tr">Sipariş & stok</span><span data-lang="en">Orders & stock</span></span>
+        <span class="seat"><i class="ti ti-truck"></i> <span data-lang="tr">Filo takip</span><span data-lang="en">Fleet tracking</span></span>
+        <span class="seat"><i class="ti ti-files"></i> <span data-lang="tr">Doküman arşivi</span><span data-lang="en">Document archive</span></span>
+        <span class="seat"><i class="ti ti-clipboard-list"></i> <span data-lang="tr">Envanter</span><span data-lang="en">Inventory</span></span>
       </div>
     </div>
     <div class="spine-row"><div class="spine"></div></div>
     <div class="band">
-      <div class="band-cap">Gruplar — uzmanlık alanları</div>
+      <div class="band-cap"><span data-lang="tr">Gruplar — uzmanlık alanları</span><span data-lang="en">Sections — areas of expertise</span></div>
       <div class="band-row">
-        <span class="seat group"><i class="ti ti-users"></i> İK</span>
-        <span class="seat group"><i class="ti ti-tools"></i> Üretim</span>
-        <span class="seat group"><i class="ti ti-coin"></i> Finans</span>
-        <span class="seat group"><i class="ti ti-dots"></i> ve diğerleri</span>
+        <span class="seat group"><i class="ti ti-users"></i> <span data-lang="tr">İK</span><span data-lang="en">HR</span></span>
+        <span class="seat group"><i class="ti ti-tools"></i> <span data-lang="tr">Üretim</span><span data-lang="en">Production</span></span>
+        <span class="seat group"><i class="ti ti-coin"></i> <span data-lang="tr">Finans</span><span data-lang="en">Finance</span></span>
+        <span class="seat group"><i class="ti ti-dots"></i> <span data-lang="tr">ve diğerleri</span><span data-lang="en">and more</span></span>
       </div>
     </div>
     <div class="spine-row"><div class="spine"></div></div>
     <div class="band" style="text-align:center;">
-      <div class="band-cap">Şef — her şeyi yöneten akıl</div>
-      <div class="conductor-pill"><i class="ti ti-wand"></i> Şef</div>
+      <div class="band-cap"><span data-lang="tr">Şef — her şeyi yöneten akıl</span><span data-lang="en">Conductor — the mind that directs everything</span></div>
+      <div class="conductor-pill"><i class="ti ti-wand"></i> <span data-lang="tr">Şef</span><span data-lang="en">Conductor</span></div>
     </div>
     <div class="spine-row"><div class="spine"></div></div>
     <div class="band" style="text-align:center;">
-      <div class="band-cap">Sen — tek bir soru</div>
-      <div class="listener-pill"><i class="ti ti-user"></i> Sen</div>
+      <div class="band-cap"><span data-lang="tr">Sen — tek bir soru</span><span data-lang="en">You — a single question</span></div>
+      <div class="listener-pill"><i class="ti ti-user"></i> <span data-lang="tr">Sen</span><span data-lang="en">You</span></div>
     </div>
   </div>
 
   <div class="callout">
     <i class="ti ti-arrow-up"></i>
-    <div>Sen sadece <strong>şefle</strong> konuşursun. O, doğru grupları çağırır; gruplar kendi enstrümanlarından sesi çıkarır. Sen aşağıdan tek bir müzik duyarsın.</div>
+    <div data-lang="tr">Sen sadece <strong>şefle</strong> konuşursun. O, doğru grupları çağırır; gruplar kendi enstrümanlarından sesi çıkarır. Sen aşağıdan tek bir müzik duyarsın.</div>
+    <div data-lang="en">You speak only to the <strong>conductor</strong>. It calls in the right sections; each section draws sound from its own instruments. From the audience, you hear a single piece of music.</div>
   </div>
 </section>
 
 <!-- ===== SLIDE 4 — THE CONDUCTOR ===== -->
 <section class="slide" id="s4">
   <div class="slide-num">04 / 09</div>
-  <div class="eyebrow"><i class="ti ti-wand"></i> Şef</div>
-  <h2>Orkestrayı bir arada tutan akıl</h2>
-  <p class="lead">Sen sadece şefle konuşursun; gerisini o halleder. Aynı anda dört işi birden yapar:</p>
+  <div class="eyebrow"><i class="ti ti-wand"></i> <span data-lang="tr">Şef</span><span data-lang="en">The conductor</span></div>
+  <h2 data-lang="tr">Orkestrayı bir arada tutan akıl</h2>
+  <h2 data-lang="en">The mind that holds the orchestra together</h2>
+  <p class="lead" data-lang="tr">Sen yalnızca şefle konuşursun; gerisini o halleder. Aynı anda dört işi birden yürütür:</p>
+  <p class="lead" data-lang="en">You speak only to the conductor; it handles the rest. It does four things at once:</p>
 
   <div class="maps">
     <div class="map">
       <div class="map-ico"><i class="ti ti-route"></i></div>
       <div>
-        <h3>Doğru grubu sahneye çağırır</h3>
-        <p>Sorduğun şeyi, o konunun uzmanına yönlendirir. Sen "kime sorayım?" diye düşünmezsin.</p>
+        <h3 data-lang="tr">Doğru grubu sahneye çağırır</h3>
+        <h3 data-lang="en">Calls the right section to the stage</h3>
+        <p data-lang="tr">Sorduğun şeyi, o konunun uzmanına yönlendirir. Sen "kime sorayım?" diye düşünmezsin.</p>
+        <p data-lang="en">It routes your question to the expert on that topic. You never have to wonder "who do I ask?"</p>
       </div>
     </div>
     <div class="map">
       <div class="map-ico"><i class="ti ti-history"></i></div>
       <div>
-        <h3>Tüm provayı hatırlar</h3>
-        <p>Önceki konuşmaları aklında tutar. Sabah bilgisayarda başladığın konu, akşam telefonda kaldığı yerden devam eder.</p>
+        <h3 data-lang="tr">Tüm provayı hatırlar</h3>
+        <h3 data-lang="en">Remembers the whole rehearsal</h3>
+        <p data-lang="tr">Önceki konuşmaları aklında tutar. Sabah bilgisayarda başladığın konu, akşam telefonda kaldığın yerden devam eder.</p>
+        <p data-lang="en">It keeps previous conversations in mind. A topic you start on your computer in the morning picks up right where you left it on your phone that evening.</p>
       </div>
     </div>
     <div class="map">
       <div class="map-ico"><i class="ti ti-shield-check"></i></div>
       <div>
-        <h3>Kimin neyi çalacağına izin verir</h3>
-        <p>Herkes her bilgiyi göremez. Şef, senin rolüne göre neye erişebileceğine karar verir.</p>
+        <h3 data-lang="tr">Kimin neyi çalacağına karar verir</h3>
+        <h3 data-lang="en">Decides who may play what</h3>
+        <p data-lang="tr">Herkes her bilgiyi göremez. Şef, senin rolüne göre neye erişebileceğine karar verir.</p>
+        <p data-lang="en">Not everyone can see every piece of information. The conductor decides what you can access based on your role.</p>
       </div>
     </div>
     <div class="map">
       <div class="map-ico"><i class="ti ti-microphone-2"></i></div>
       <div>
-        <h3>Konseri kaydeder</h3>
-        <p>Kim ne sordu, ne yanıt aldı — hepsi kayıt altında. Güven ve yasal uyum için.</p>
+        <h3 data-lang="tr">Konseri kaydeder</h3>
+        <h3 data-lang="en">Records the concert</h3>
+        <p data-lang="tr">Kim ne sordu, ne yanıt aldı — hepsi kayıt altında. Güven ve yasal uyum için.</p>
+        <p data-lang="en">Who asked what, and what answer came back — it's all on the record, for trust and compliance.</p>
       </div>
     </div>
   </div>
@@ -427,116 +489,141 @@
 <!-- ===== SLIDE 5 — DOMAINS ===== -->
 <section class="slide" id="s5">
   <div class="slide-num">05 / 09</div>
-  <div class="eyebrow"><i class="ti ti-users-group"></i> Gruplar</div>
-  <h2>Her uzmanlık alanı bir grup</h2>
-  <p class="lead">Bir orkestrada yaylılar, üflemeliler, vurmalılar vardır. Burada da her iş alanı kendi grubu — ve her grupta birden çok müzisyen çalışır.</p>
+  <div class="eyebrow"><i class="ti ti-users-group"></i> <span data-lang="tr">Gruplar</span><span data-lang="en">Sections</span></div>
+  <h2 data-lang="tr">Her uzmanlık alanı bir grup</h2>
+  <h2 data-lang="en">Each area of expertise is a section</h2>
+  <p class="lead" data-lang="tr">Bir orkestrada yaylılar, üflemeliler, vurmalılar vardır. Burada da her iş alanı kendi grubu — ve her grupta birden çok müzisyen çalışır.</p>
+  <p class="lead" data-lang="en">An orchestra has strings, winds, and percussion. Here, each business area is its own section — and every section has several musicians.</p>
 
   <div class="grid8">
-    <div class="gcard"><i class="ti ti-users"></i><h3>İç bilgi & İK</h3><p>Çalışan, aday, prosedür</p></div>
-    <div class="gcard"><i class="ti ti-shopping-cart"></i><h3>Satın alma</h3><p>Tedarikçi, sipariş</p></div>
-    <div class="gcard"><i class="ti ti-stack-2"></i><h3>Talep & stok</h3><p>Ne kadar var, ne lazım</p></div>
-    <div class="gcard"><i class="ti ti-truck-delivery"></i><h3>Lojistik</h3><p>Sevkiyat, rota, takip</p></div>
-    <div class="gcard"><i class="ti ti-checklist"></i><h3>Kalite</h3><p>Denetim, uygunluk</p></div>
-    <div class="gcard"><i class="ti ti-businessplan"></i><h3>Satış</h3><p>Müşteri, sipariş, iade</p></div>
-    <div class="gcard"><i class="ti ti-chart-bar"></i><h3>Karar destek</h3><p>Özet, gösterge, sapma</p></div>
-    <div class="gcard"><i class="ti ti-coin"></i><h3>Finans</h3><p>Tahsilat, risk</p></div>
-    <div class="gcard"><i class="ti ti-tools"></i><h3>Üretim & operasyon</h3><p>Hat, vardiya, OEE</p></div>
-    <div class="gcard"><i class="ti ti-headset"></i><h3>Müşteri hizmetleri</h3><p>Talep, çağrı, çözüm</p></div>
-    <div class="gcard"><i class="ti ti-speakerphone"></i><h3>Pazarlama</h3><p>Kampanya, segment</p></div>
-    <div class="gcard"><i class="ti ti-device-desktop"></i><h3>BT / iç sistemler</h3><p>Talep, varlık, lisans</p></div>
+    <div class="gcard"><i class="ti ti-users"></i><h3 data-lang="tr">İç bilgi & İK</h3><h3 data-lang="en">Internal knowledge & HR</h3><p data-lang="tr">Çalışan, aday, prosedür</p><p data-lang="en">Employees, candidates, procedures</p></div>
+    <div class="gcard"><i class="ti ti-shopping-cart"></i><h3 data-lang="tr">Satın alma</h3><h3 data-lang="en">Procurement</h3><p data-lang="tr">Tedarikçi, sipariş</p><p data-lang="en">Suppliers, orders</p></div>
+    <div class="gcard"><i class="ti ti-stack-2"></i><h3 data-lang="tr">Talep & stok</h3><h3 data-lang="en">Demand & stock</h3><p data-lang="tr">Ne kadar var, ne lazım</p><p data-lang="en">What's on hand, what's needed</p></div>
+    <div class="gcard"><i class="ti ti-truck-delivery"></i><h3 data-lang="tr">Lojistik</h3><h3 data-lang="en">Logistics</h3><p data-lang="tr">Sevkiyat, rota, takip</p><p data-lang="en">Shipments, routes, tracking</p></div>
+    <div class="gcard"><i class="ti ti-checklist"></i><h3 data-lang="tr">Kalite</h3><h3 data-lang="en">Quality</h3><p data-lang="tr">Denetim, uygunluk</p><p data-lang="en">Inspection, compliance</p></div>
+    <div class="gcard"><i class="ti ti-businessplan"></i><h3 data-lang="tr">Satış</h3><h3 data-lang="en">Sales</h3><p data-lang="tr">Müşteri, sipariş, iade</p><p data-lang="en">Customers, orders, returns</p></div>
+    <div class="gcard"><i class="ti ti-chart-bar"></i><h3 data-lang="tr">Karar destek</h3><h3 data-lang="en">Decision support</h3><p data-lang="tr">Özet, gösterge, sapma</p><p data-lang="en">Summaries, indicators, deviations</p></div>
+    <div class="gcard"><i class="ti ti-coin"></i><h3 data-lang="tr">Finans</h3><h3 data-lang="en">Finance</h3><p data-lang="tr">Tahsilat, risk</p><p data-lang="en">Collections, risk</p></div>
+    <div class="gcard"><i class="ti ti-tools"></i><h3 data-lang="tr">Üretim & operasyon</h3><h3 data-lang="en">Production & operations</h3><p data-lang="tr">Hat, vardiya, OEE</p><p data-lang="en">Lines, shifts, OEE</p></div>
+    <div class="gcard"><i class="ti ti-headset"></i><h3 data-lang="tr">Müşteri hizmetleri</h3><h3 data-lang="en">Customer service</h3><p data-lang="tr">Talep, çağrı, çözüm</p><p data-lang="en">Requests, calls, resolutions</p></div>
+    <div class="gcard"><i class="ti ti-speakerphone"></i><h3 data-lang="tr">Pazarlama</h3><h3 data-lang="en">Marketing</h3><p data-lang="tr">Kampanya, segment</p><p data-lang="en">Campaigns, segments</p></div>
+    <div class="gcard"><i class="ti ti-device-desktop"></i><h3 data-lang="tr">BT / iç sistemler</h3><h3 data-lang="en">IT / internal systems</h3><p data-lang="tr">Talep, varlık, lisans</p><p data-lang="en">Tickets, assets, licenses</p></div>
   </div>
 
   <div class="callout">
     <i class="ti ti-plus"></i>
-    <div>Yeni bir grup eklemek, baştan yeni bir orkestra kurmak değil — <strong>sahneye bir grup daha katmak</strong>. Şef, hafıza, yetki, kayıt zaten hazır.</div>
+    <div data-lang="tr">Yeni bir grup eklemek, baştan yeni bir orkestra kurmak değil — <strong>sahneye bir grup daha katmak</strong>. Şef, hafıza, yetki, kayıt zaten hazır.</div>
+    <div data-lang="en">Adding a new section isn't building a new orchestra from scratch — it's <strong>bringing one more section onto the stage</strong>. The conductor, memory, permissions, and audit trail are already in place.</div>
   </div>
 </section>
 
 <!-- ===== SLIDE 6 — MUSICIANS & INSTRUMENTS ===== -->
 <section class="slide" id="s6">
   <div class="slide-num">06 / 09</div>
-  <div class="eyebrow"><i class="ti ti-music"></i> Müzisyenler ve enstrümanlar</div>
-  <h2>Sen müziği duyarsın, mekaniği değil</h2>
+  <div class="eyebrow"><i class="ti ti-music"></i> <span data-lang="tr">Müzisyenler ve enstrümanlar</span><span data-lang="en">Musicians and instruments</span></div>
+  <h2 data-lang="tr">Sen müziği duyarsın, mekaniği değil</h2>
+  <h2 data-lang="en">You hear the music, not the mechanics</h2>
 
   <div class="cols-2" style="margin-top: 14px;">
     <div class="compare pos">
-      <div class="compare-label"><i class="ti ti-user-cog"></i> Müzisyenler</div>
-      <h3>Her biri tek işi çok iyi yapar</h3>
-      <p>Her grupta küçük yardımcılar var. Biri belge okur, biri hatırlatma gönderir, biri sistemden veri çeker. Hepsi birlikte çalışır ama sen tek tek onları görmezsin.</p>
+      <div class="compare-label"><i class="ti ti-user-cog"></i> <span data-lang="tr">Müzisyenler</span><span data-lang="en">Musicians</span></div>
+      <h3 data-lang="tr">Her biri tek işi çok iyi yapar</h3>
+      <h3 data-lang="en">Each does one job very well</h3>
+      <p data-lang="tr">Her grupta küçük yardımcılar var. Biri belge okur, biri hatırlatma gönderir, biri sistemden veri çeker. Hepsi birlikte çalışır ama sen tek tek onları görmezsin.</p>
+      <p data-lang="en">Each section has small helpers — its musicians. One reads documents, one sends reminders, one pulls data from a system. They all play together, but you never see them individually.</p>
     </div>
     <div class="compare pos">
-      <div class="compare-label"><i class="ti ti-music"></i> Enstrümanlar</div>
-      <h3>Ses, mevcut sistemlerden gelir</h3>
-      <p>Asıl bilgi, şirketin zaten kullandığı sistemlerde durur — sipariş sistemi, CRM, doküman arşivi, envanter. Müzisyen kendi enstrümanını çalar; sen sonucu duyarsın.</p>
+      <div class="compare-label"><i class="ti ti-music"></i> <span data-lang="tr">Enstrümanlar</span><span data-lang="en">Instruments</span></div>
+      <h3 data-lang="tr">Ses, mevcut sistemlerden gelir</h3>
+      <h3 data-lang="en">The sound comes from existing systems</h3>
+      <p data-lang="tr">Asıl bilgi, şirketin zaten kullandığı sistemlerde durur — sipariş sistemi, CRM, doküman arşivi, envanter. Müzisyen kendi enstrümanını çalar; sen sonucu duyarsın.</p>
+      <p data-lang="en">The real information lives in the systems the company already uses — the order system, CRM, document archive, inventory. Each musician plays their own instrument; you hear only the result.</p>
     </div>
   </div>
 
   <div class="callout gold">
     <i class="ti ti-lock-check"></i>
-    <div><strong>Önemli:</strong> Bu sistemler yerinde kalır. Veri kopyalanmaz, taşınmaz, tek bir dev depoya yığılmaz. Soru sorulduğu an çağrılır, kullanılır. Sen sadece birleşmiş, anlamlı sonucu görürsün.</div>
+    <div data-lang="tr"><strong>Önemli:</strong> Bu sistemler yerinde kalır. Veri kopyalanmaz, taşınmaz, tek bir dev depoya yığılmaz. Soru sorulduğu an çağrılır, kullanılır. Sen sadece birleşmiş, anlamlı sonucu görürsün.</div>
+    <div data-lang="en"><strong>Important:</strong> These systems stay where they are. Data isn't copied, moved, or piled into one giant warehouse. It's called and used the moment a question is asked. You only see the combined, meaningful result.</div>
   </div>
 </section>
 
 <!-- ===== SLIDE 7 — HOW IT WORKS ===== -->
 <section class="slide" id="s7">
   <div class="slide-num">07 / 09</div>
-  <div class="eyebrow"><i class="ti ti-player-play"></i> Nasıl çalışır</div>
-  <h2>Bir soru, tek bir cevap</h2>
-  <p class="lead">Sen tek cümle yazarsın. Arkada birden fazla sistem konuşur. Bunu fark etmezsin bile.</p>
+  <div class="eyebrow"><i class="ti ti-player-play"></i> <span data-lang="tr">Nasıl çalışır</span><span data-lang="en">How it works</span></div>
+  <h2 data-lang="tr">Bir soru, tek bir cevap</h2>
+  <h2 data-lang="en">One question, one answer</h2>
+  <p class="lead" data-lang="tr">Sen tek bir cümle yazarsın. Arkada birden fazla sistem konuşur — sen fark bile etmezsin.</p>
+  <p class="lead" data-lang="en">You write a single sentence. Behind it, several systems talk to each other. You won't even notice.</p>
 
   <div class="flow">
-    <div class="step"><div class="n">1</div><h3>Sen sorarsın</h3><p>Sıradan Türkçeyle, tek cümle.</p></div>
-    <div class="step"><div class="n">2</div><h3>Şef yönlendirir</h3><p>Doğru grupları sahneye çağırır.</p></div>
-    <div class="step"><div class="n">3</div><h3>Müzisyenler çalar</h3><p>Kendi sistemlerinden bilgiyi okur.</p></div>
-    <div class="step"><div class="n">4</div><h3>Tek cevap döner</h3><p>Şef hepsini birleştirir, sana sunar.</p></div>
+    <div class="step"><div class="n">1</div><h3 data-lang="tr">Sen sorarsın</h3><h3 data-lang="en">You ask</h3><p data-lang="tr">Gündelik Türkçeyle, tek cümle.</p><p data-lang="en">In plain language, one sentence.</p></div>
+    <div class="step"><div class="n">2</div><h3 data-lang="tr">Şef yönlendirir</h3><h3 data-lang="en">The conductor routes</h3><p data-lang="tr">Doğru grupları sahneye çağırır.</p><p data-lang="en">It calls the right sections to the stage.</p></div>
+    <div class="step"><div class="n">3</div><h3 data-lang="tr">Müzisyenler çalar</h3><h3 data-lang="en">The musicians play</h3><p data-lang="tr">Kendi sistemlerinden bilgiyi okur.</p><p data-lang="en">They read information from their own systems.</p></div>
+    <div class="step"><div class="n">4</div><h3 data-lang="tr">Tek cevap döner</h3><h3 data-lang="en">One answer returns</h3><p data-lang="tr">Şef hepsini birleştirir, sana sunar.</p><p data-lang="en">The conductor combines it all and presents it to you.</p></div>
   </div>
 
   <div class="chat">
-    <div class="bubble me">Bu ay geç kalan siparişler hangileri?</div>
-    <div class="bubble bot">Bu ay <b>3 sipariş</b> gecikti. En kritik olan <b>2 gün</b> gecikmede ve müşteriye henüz bilgi verilmemiş. İstersen ilgili ekibe hatırlatma göndereyim.</div>
+    <div class="bubble me" data-lang="tr">Bu ay geç kalan siparişler hangileri?</div>
+    <div class="bubble me" data-lang="en">Which orders are running late this month?</div>
+    <div class="bubble bot" data-lang="tr">Bu ay <b>3 sipariş</b> gecikti. En kritik olan <b>2 gün</b> gecikmede ve müşteriye henüz bilgi verilmemiş. İstersen ilgili ekibe hatırlatma göndereyim.</div>
+    <div class="bubble bot" data-lang="en"><b>3 orders</b> are late this month. The most critical is <b>2 days</b> behind and the customer hasn't been notified yet. If you'd like, I can send the relevant team a reminder.</div>
   </div>
-  <p class="chat-note">↑ Tek soru. Arkada sipariş sistemi + takip + hatırlatma birlikte çalıştı.</p>
+  <p class="chat-note" data-lang="tr">↑ Tek soru. Arkada sipariş sistemi + takip + hatırlatma birlikte çalıştı.</p>
+  <p class="chat-note" data-lang="en">↑ One question. Behind it, the order system + tracking + reminders worked together.</p>
 </section>
 
 <!-- ===== SLIDE 8 — TRUST ===== -->
 <section class="slide" id="s8">
   <div class="slide-num">08 / 09</div>
-  <div class="eyebrow"><i class="ti ti-shield-check"></i> Güven</div>
-  <h2>Herkes her notayı çalamaz</h2>
-  <p class="lead">Güçlü bir sistem, aynı zamanda güvenli olmak zorunda. Bu, sonradan eklenen bir özellik değil — şefin işinin parçası.</p>
+  <div class="eyebrow"><i class="ti ti-shield-check"></i> <span data-lang="tr">Güven</span><span data-lang="en">Trust</span></div>
+  <h2 data-lang="tr">Herkes her notayı çalamaz</h2>
+  <h2 data-lang="en">Not everyone can play every note</h2>
+  <p class="lead" data-lang="tr">Güçlü bir sistem aynı zamanda güvenli olmak zorundadır. Güvenlik sonradan eklenen bir özellik değil — şefin işinin parçası.</p>
+  <p class="lead" data-lang="en">A powerful system has to be a safe one. This isn't a feature bolted on later — it's built into the conductor's job.</p>
 
   <div class="trust">
     <div class="tcard">
       <i class="ti ti-key"></i>
-      <h3>Yetki</h3>
-      <p>Rolüne göre erişim. Bir ekip yöneticisi kendi ekibini görür; herkes her şeyi göremez.</p>
+      <h3 data-lang="tr">Yetki</h3>
+      <h3 data-lang="en">Permissions</h3>
+      <p data-lang="tr">Rolüne göre erişim. Bir ekip yöneticisi kendi ekibini görür; herkes her şeyi göremez.</p>
+      <p data-lang="en">Access by role. A team manager sees their own team; not everyone can see everything.</p>
     </div>
     <div class="tcard">
       <i class="ti ti-notebook"></i>
-      <h3>Kayıt</h3>
-      <p>Her soru ve yanıt kayıt altında. Bir sorun olursa geriye dönüp tam olarak ne olduğuna bakılabilir.</p>
+      <h3 data-lang="tr">Kayıt</h3>
+      <h3 data-lang="en">Audit trail</h3>
+      <p data-lang="tr">Her soru ve yanıt kayıt altında. Bir sorun olursa geriye dönüp tam olarak ne olduğuna bakılabilir.</p>
+      <p data-lang="en">Every question and answer is on the record. If something goes wrong, you can go back and see exactly what happened.</p>
     </div>
     <div class="tcard">
       <i class="ti ti-lock"></i>
-      <h3>Gizlilik</h3>
-      <p>Kişisel veri işleme, KVKK/GDPR-aware guardrail'ler ve gerektiğinde maskeleme adımlarıyla tasarlanır.</p>
+      <h3 data-lang="tr">Gizlilik</h3>
+      <h3 data-lang="en">Privacy</h3>
+      <p data-lang="tr">Kişisel veri işleme, KVKK/GDPR-aware guardrail'ler ve gerektiğinde maskeleme adımlarıyla tasarlanır.</p>
+      <p data-lang="en">Personal-data processing is designed with KVKK/GDPR-aware guardrails and masking steps where needed.</p>
     </div>
   </div>
 
   <div class="callout">
     <i class="ti ti-shield-check"></i>
-    <div>Tek bir yerden erişim, aynı zamanda <strong>tek bir yerden denetim</strong> demek. Dağınık sistemlerde imkânsız olan şey burada doğal.</div>
+    <div data-lang="tr">Tek bir yerden erişim, aynı zamanda <strong>tek bir yerden denetim</strong> demektir. Dağınık sistemlerde imkânsız olan şey burada doğal.</div>
+    <div data-lang="en">Access from one place also means <strong>oversight from one place</strong>. What's impossible across scattered systems is natural here.</div>
   </div>
 </section>
 
 <!-- ===== SLIDE 9 — WHERE WE ARE / CLOSE ===== -->
 <section class="slide" id="s9">
   <div class="slide-num">09 / 09</div>
-  <div class="eyebrow"><i class="ti ti-compass"></i> Kapsam</div>
-  <h2>Bu bir uygulama planı değil, mimari desen</h2>
-  <p class="lead">Görseldeki alanlar temsilidir. Amaç bir domain seçimi veya uygulama planı önermek değil; farklı uzmanlık alanlarının aynı orkestrasyon katmanına nasıl bağlanabileceğini göstermektir.</p>
+  <div class="eyebrow"><i class="ti ti-compass"></i> <span data-lang="tr">Kapsam</span><span data-lang="en">Scope</span></div>
+  <h2 data-lang="tr">Bu bir uygulama planı değil, mimari desen</h2>
+  <h2 data-lang="en">This isn't an implementation plan — it's an architectural pattern</h2>
+  <p class="lead" data-lang="tr">Görseldeki alanlar yalnızca birer örnek. Amaç belirli bir domain seçimi ya da uygulama planı önermek değil; farklı uzmanlık alanlarının aynı orkestrasyon katmanına nasıl bağlanabileceğini göstermek.</p>
+  <p class="lead" data-lang="en">The areas shown are illustrative. The goal isn't to recommend a choice of domains or an implementation plan; it's to show how different areas of expertise can connect to the same orchestration layer.</p>
 
-  <ul class="prog">
+  <ul class="prog" data-lang="tr">
     <li>
       <span class="dot wip"><i class="ti ti-scale"></i></span>
       <span class="ptext"><b>Domain'ler temsilidir:</b> İK, finans, lojistik veya kalite gibi başlıklar örnek alanlardır; belirli bir kurum yol haritası veya uygulama planı ifade etmez.</span>
@@ -550,16 +637,31 @@
       <span class="ptext"><b>Genişleme modülerdir:</b> Yeni bir domain eklemek, tüm yapıyı yeniden kurmak değil; aynı güvenlik ve denetlenebilirlik çerçevesine yeni bir uzmanlık alanı bağlamaktır.</span>
     </li>
   </ul>
+  <ul class="prog" data-lang="en">
+    <li>
+      <span class="dot wip"><i class="ti ti-scale"></i></span>
+      <span class="ptext"><b>Domains are illustrative:</b> headings like HR, finance, logistics, or quality are example areas; they don't represent any specific organization's roadmap or implementation plan.</span>
+    </li>
+    <li>
+      <span class="dot wip"><i class="ti ti-bolt"></i></span>
+      <span class="ptext"><b>The orchestration layer is shared:</b> routing, memory, permissions, the audit trail, and approval mechanisms run on common principles, independent of any domain.</span>
+    </li>
+    <li>
+      <span class="dot wip"><i class="ti ti-coin"></i></span>
+      <span class="ptext"><b>Growth is modular:</b> adding a new domain isn't rebuilding the whole structure; it's connecting a new area of expertise to the same security and auditability framework.</span>
+    </li>
+  </ul>
 
   <div class="callout gold big" style="margin-top: 30px;">
     <i class="ti ti-wand"></i>
-    <div>Fikir basit: <strong>tek tek akıllı araçlar değil, birlikte çalan bir orkestra.</strong> Domain'ler değişebilir; asıl sabit kalan şey orkestrasyon, guardrails, kayıt ve insan onayı yaklaşımıdır.</div>
+    <div data-lang="tr">Fikir basit: <strong>tek tek akıllı araçlar değil, birlikte çalan bir orkestra.</strong> Domain'ler değişebilir; asıl sabit kalan şey orkestrasyon, guardrails, kayıt ve insan onayı yaklaşımıdır.</div>
+    <div data-lang="en">The idea is simple: <strong>not individually smart tools, but an orchestra playing together.</strong> The domains may change; what stays constant is the approach to orchestration, guardrails, audit, and human approval.</div>
   </div>
 </section>
 
 </div>
 
-<div class="nav-hint">↓ Aşağı kaydır veya ok tuşları · <kbd>P</kbd> yazdır</div>
+<div class="nav-hint"><span data-lang="tr">↓ Aşağı kaydır veya ok tuşları · <kbd>P</kbd> yazdır</span><span data-lang="en">↓ Scroll down or arrow keys · <kbd>P</kbd> to print</span></div>
 
 <div class="indicators" id="indicators">
   <a href="#s1"></a><a href="#s2"></a><a href="#s3"></a><a href="#s4"></a>
@@ -596,6 +698,38 @@
       window.print();
     }
   });
+</script>
+
+<script>
+  // ---------- Dil değiştirici (TR ⇄ EN) ----------
+  (function () {
+    var KEY = 'eao-lang';
+    var root = document.documentElement;
+    var titleEl = document.querySelector('title');
+
+    function current() { return root.classList.contains('en') ? 'en' : 'tr'; }
+
+    function apply(lang, persist) {
+      root.classList.toggle('en', lang === 'en');
+      root.setAttribute('lang', lang);
+      if (titleEl) {
+        var t = titleEl.getAttribute('data-title-' + lang);
+        if (t) titleEl.textContent = t;
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, lang); } catch (e) {}
+        var url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    apply(current(), false);
+
+    document.getElementById('langToggle').addEventListener('click', function () {
+      apply(current() === 'en' ? 'tr' : 'en', true);
+    });
+  })();
 </script>
 
 </body>

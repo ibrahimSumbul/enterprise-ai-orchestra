@@ -4,7 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Enterprise AI Orchestra</title>
-  <meta name="description" content="Multi-domain AI orchestration için kavramsal mimari vision. Çoklu kanal, çoklu domain, federe veri.">
+  <meta name="description" content="Multi-domain AI orchestration için kavramsal mimari vision · A conceptual architecture vision for multi-domain AI orchestration.">
+  <!-- No-FOUC dil seçimi: ?lang → localStorage → navigator.language. Boyamadan önce html.en'i ayarlar. -->
+  <script>
+    (function () {
+      try {
+        var q = new URLSearchParams(location.search).get('lang');
+        var s = localStorage.getItem('eao-lang');
+        var lang = (q === 'en' || q === 'tr') ? q
+          : (s === 'en' || s === 'tr') ? s
+          : ((navigator.language || 'tr').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en');
+        var d = document.documentElement;
+        d.classList.toggle('en', lang === 'en');
+        d.setAttribute('lang', lang);
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
   <style>
     :root {
@@ -40,27 +55,44 @@
     .foot { margin-top: 38px; font-size: 12px; color: var(--ink-3); }
     .foot a { color: var(--purple); text-decoration: none; }
     .foot a:hover { color: var(--gold); }
+
+    /* ---------- Dil değiştirici (TR ⇄ EN) ---------- */
+    /* JS yoksa varsayılan = TR; EN gizli kalır (graceful degrade). */
+    html:not(.en) [data-lang="en"] { display: none; }
+    html.en       [data-lang="tr"] { display: none; }
+    .langbtn { position: fixed; top: 18px; right: 18px; z-index: 10; display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; background: var(--glass); border: 1px solid var(--glass-bd); border-radius: 100px; color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .5px; cursor: pointer; backdrop-filter: blur(10px); transition: border-color .2s, color .2s, transform .2s; }
+    .langbtn:hover { color: var(--ink); border-color: rgba(139,128,240,0.5); transform: translateY(-1px); }
+    .langbtn i { font-size: 15px; color: var(--purple); }
   </style>
 </head>
 <body>
 
+<button class="langbtn" id="langToggle" type="button" aria-label="Switch language">
+  <i class="ti ti-language" aria-hidden="true"></i><span data-lang="tr">EN</span><span data-lang="en">TR</span>
+</button>
+
 <div class="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
 
 <div class="wrap">
-  <div class="eyebrow">Vision · Pattern · Vision</div>
+  <div class="eyebrow" lang="en">Vision · Pattern · Architecture</div>
   <h1>Enterprise AI Orchestra</h1>
-  <p class="sub">Multi-domain AI orchestration için kavramsal mimari vision. Tek tek akıllı araçlar değil, birlikte çalan bir orkestra.</p>
+  <p class="sub" data-lang="tr">Multi-domain AI orchestration için kavramsal mimari vision. Tek tek akıllı araçlar değil, birlikte çalan bir orkestra.</p>
+  <p class="sub" data-lang="en">A conceptual architecture vision for multi-domain AI orchestration. Not isolated smart tools, but an orchestra playing in concert.</p>
 
   <div class="cards">
-    <a class="card" href="for-decision-makers/orkestra-tanitim.html">
+    <a class="card" data-langlink href="for-decision-makers/orkestra-tanitim.html">
       <i class="ti ti-presentation icn"></i>
-      <h2>9 Slayt Tanıtım</h2>
-      <p>Karar verici için kapsamlı sunum. Scroll-snap, klavye nav, light/dark mode auto, P ile yazdır.</p>
+      <h2 data-lang="tr">9 Slayt Tanıtım</h2>
+      <h2 data-lang="en">9-Slide Walkthrough</h2>
+      <p data-lang="tr">Karar vericiler için baştan sona sunum. Scroll-snap, klavye nav, light/dark mode auto, P ile yazdır.</p>
+      <p data-lang="en">A comprehensive deck for decision-makers. Scroll-snap, keyboard nav, auto light/dark mode, press P to print.</p>
     </a>
-    <a class="card" href="for-decision-makers/orkestra-diagram.html">
+    <a class="card" data-langlink href="for-decision-makers/orkestra-diagram.html">
       <i class="ti ti-map-2 icn"></i>
-      <h2>Tek Bakışta Harita</h2>
-      <p>İnteraktif mimari diyagram — katmanları açıp kapa, "Teknik detay" toggle ile kavramsal/teknik geçiş.</p>
+      <h2 data-lang="tr">Tek Bakışta Harita</h2>
+      <h2 data-lang="en">Map at a Glance</h2>
+      <p data-lang="tr">İnteraktif mimari diyagram — katmanları açıp kapat, "Teknik detay" düğmesiyle kavramsal ve teknik görünüm arasında geçiş yap.</p>
+      <p data-lang="en">Interactive architecture diagram — expand/collapse layers, switch conceptual/technical with the "Technical detail" toggle.</p>
     </a>
   </div>
 
@@ -75,6 +107,45 @@
     <a href="https://github.com/ibrahimSumbul">github.com/ibrahimSumbul</a>
   </div>
 </div>
+
+<script>
+  (function () {
+    var KEY = 'eao-lang';
+    var root = document.documentElement;
+
+    function current() { return root.classList.contains('en') ? 'en' : 'tr'; }
+
+    // İç linklere seçili dili taşı (?lang=...), böylece sunum/diyagram aynı dilde açılır.
+    // Relative path korunur: "for-decision-makers/orkestra-tanitim.html?lang=en"
+    function syncLinks(lang) {
+      document.querySelectorAll('a[data-langlink]').forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        var hashAt = href.indexOf('#');
+        var hash = hashAt >= 0 ? href.slice(hashAt) : '';
+        var base = href.replace(/[?#].*$/, '');
+        a.setAttribute('href', base + '?lang=' + lang + hash);
+      });
+    }
+
+    function apply(lang, persist) {
+      root.classList.toggle('en', lang === 'en');
+      root.setAttribute('lang', lang);
+      syncLinks(lang);
+      if (persist) {
+        try { localStorage.setItem(KEY, lang); } catch (e) {}
+        var url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    apply(current(), false);
+
+    document.getElementById('langToggle').addEventListener('click', function () {
+      apply(current() === 'en' ? 'tr' : 'en', true);
+    });
+  })();
+</script>
 
 </body>
 </html>

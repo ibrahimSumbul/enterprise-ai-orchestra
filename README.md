@@ -1,17 +1,17 @@
 # Enterprise AI Orchestra
 
-> Multi-domain AI orchestration için kavramsal mimari vision.
-> Çoklu kanal · çoklu domain · federe veri · orkestra şefi + gruplar + enstrümanlar metaforu.
-
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Architecture%20Vision-blueviolet)](.)
 [![Live Demo](https://img.shields.io/badge/Live-GitHub%20Pages-blue)](https://ibrahimsumbul.github.io/enterprise-ai-orchestra/)
 
-Bu repo bir **kavramsal mimari vision** sunar — kod değil, fikir. Modern kurumsal AI'ın temel sorunu: tek tek akıllı araçlar **birlikte uyumlu** çalışmıyor. Bir orkestrayı orkestra yapan müzisyenler değil — **şef**.
+<sub>🌐 **Türkçe** · [English](#english)</sub>
+
+> Multi-domain AI orchestration için kavramsal mimari vision.
+> Çoklu kanal · çoklu domain · federe veri · orkestra şefi + gruplar + enstrümanlar metaforu.
+
+Bu repo bir **kavramsal mimari vision** sunar — kod değil, fikir. Modern kurumsal AI'ın asıl sorunu şu: tek tek akıllı araçlar **birlikte uyum içinde** çalışmıyor. Bir orkestrayı orkestra yapan müzisyenler değil — **şef**.
 
 > **Public-safe not:** Bu çalışma kişisel olarak hazırlanmış, vendor-neutral bir referans mimaridir. Herhangi bir şirket verisi, iç sistem detayı, müşteri bilgisi veya kuruma özel implementation bilgisi içermez.
-
-**English summary:** Enterprise AI Orchestra is a conceptual, vendor-neutral reference architecture for multi-domain AI orchestration across enterprise channels, domain agents, and federated data sources. It is not an implementation repository; public scope is limited to architecture and system design.
 
 ## İki Görsel
 
@@ -62,7 +62,8 @@ open for-decision-makers/orkestra-tanitim.html
 ```
 
 **Klavye:** `↑` `↓` slayt gez (tanıtım), `P` yazdır, `space` ilerle.
-**Toggle:** Diyagramda sağ üstte "Teknik detay" düğmesi — kavramsal/teknik versiyonu değiştir.
+**Teknik toggle:** Diyagramda sağ üstte "Teknik detay" düğmesi — kavramsal/teknik versiyonu değiştir.
+**Dil:** Her sayfada üst köşede `TR | EN` düğmesi — seçim hatırlanır ve `?lang=en` ile paylaşılabilir; ilk ziyarette tarayıcı diline göre otomatik açılır.
 
 ## Yapı
 
@@ -83,9 +84,9 @@ Bu kavramsal bir vision. Geri bildirim hoş karşılanır:
 
 - **Mimari soru veya öneri** — [GitHub Issues](https://github.com/ibrahimSumbul/enterprise-ai-orchestra/issues)
 - **Yazım/dil düzeltmesi** — direkt PR
-- **Çeviri** — özellikle İngilizce sürüm (mevcut Türkçe) için PR açık
+- **Çeviri** — Türkçe ve İngilizce birlikte tutuluyor; her ikisini iyileştiren PR'lar açık
 
-Tasarım ilkelerinden birinde **farklı görüş**ün varsa Issue aç, tartışalım — pattern'ler eleştiriyle olgunlaşır.
+Tasarım ilkelerinden birine **katılmıyorsan** Issue aç, tartışalım — desenler eleştiriyle olgunlaşır.
 
 ## Lisans
 
@@ -102,3 +103,107 @@ Mimari vision dokümanları için CC-BY-SA klasik bir tercih: fikrin yayılması
 - Email: ibrahimsumbulll@gmail.com
 
 > Bu pattern üzerine private implementation keşifleri ayrı yürütülür; public repo yalnızca generic mimari yaklaşımı ve sistem tasarımı kapsamını paylaşır. Architecture deck ve engineering deep-dive talebe açık — iletişim için bağlantılar yukarıda.
+
+---
+
+# English
+
+<sub>[Türkçe ↑](#enterprise-ai-orchestra) · 🌐 **English**</sub>
+
+> A conceptual architecture vision for multi-domain AI orchestration.
+> Multi-channel · multi-domain · federated data · conductor + sections + instruments metaphor.
+
+This repo presents a **conceptual architecture vision** — an idea, not code. The core problem of modern enterprise AI: individually smart tools don't work **in harmony**. What makes an orchestra an orchestra isn't the musicians — it's the **conductor**.
+
+> **Public-safe note:** This is a personally authored, vendor-neutral reference architecture. It contains no company data, internal system detail, customer information, or organization-specific implementation knowledge.
+
+## Two Visuals
+
+| Document | Audience | Description |
+|---|---|---|
+| [`orkestra-tanitim.html`](for-decision-makers/orkestra-tanitim.html) | Decision-maker (CIO/CTO/operations lead) | 9 slides, scroll-snap, keyboard nav, auto light/dark mode, print-friendly |
+| [`orkestra-diagram.html`](for-decision-makers/orkestra-diagram.html) | Architecture reader | Interactive map at a glance, collapsible layer info, technical-detail toggle |
+
+**Live:** https://ibrahimsumbul.github.io/enterprise-ai-orchestra/
+
+## The Four-Layer Structure
+
+This repo visualizes a comprehensive architectural pattern for "agentic orchestration":
+
+| # | Layer | Responsibility |
+|---|---|---|
+| 1 | **Channels** | Dashboard, chat (WhatsApp/Teams/web), proactive notifications — the surface the user touches |
+| 2 | **Conductor** | Intent routing, memory (Continuum), permissions/guardrails, audit trail, approval queue |
+| 3 | **Sections** | HR, Procurement, Logistics, Finance, Production, Customer Service, ... (domain agents) |
+| 4 | **Instruments** | Existing enterprise systems (ERP, CRM, DMS, inventory, Graph API) — **federated**, stay in place, no ETL |
+
+## Design Principles
+
+1. **Federated data** — sources stay in place, called at query time, no ETL/warehouse
+2. **Boundary Agent Doctrine** — every capability that crosses a system boundary is wrapped in an agent; pure functions are called directly
+3. **Three agent types** — Domain (Sonnet) · Horizontal (Haiku) · Data-Layer (Haiku + MCP server)
+4. **Four protocols** — Direct tool · MCP · A2A · Service call
+5. **Continuum** — Memory + Mediator unified (cross-channel coordination, one module)
+6. **KVKK/GDPR-aware auditability** — not a bolt-on, part of the architecture
+7. **Capability-based model routing** — domain reasoning on Sonnet, retrieval/data on Haiku
+
+## What This Repo Is **Not**
+
+- **Not code.** Not an implementation reference. (This isn't a startup pitch, and it isn't a ready-made SaaS.)
+- **Not customer-specific.** A generic enterprise architecture; no industry or company names.
+- **Not product documentation.** A thinking document — a polished vision artifact meant to be shared.
+- **Contains no organization-specific implementation detail.** No real company data, internal system names, integration details, or operational information is shared.
+
+## Quick Start
+
+```bash
+# Open locally
+git clone https://github.com/ibrahimSumbul/enterprise-ai-orchestra.git
+cd enterprise-ai-orchestra
+open index.html  # macOS — landing page
+# or directly:
+open for-decision-makers/orkestra-tanitim.html
+```
+
+**Keyboard:** `↑` `↓` move between slides (deck), `P` print, `space` advance.
+**Technical toggle:** the "Technical detail" button at the top right of the diagram — switch between the conceptual and technical versions.
+**Language:** every page has a `TR | EN` button in the top corner — the choice is remembered and shareable via `?lang=en`; on first visit it follows the browser language automatically.
+
+## Structure
+
+```
+enterprise-ai-orchestra/
+├── README.md
+├── LICENSE              # CC BY-SA 4.0
+├── index.html           # Landing — links to the two HTML files
+├── .nojekyll            # GitHub Pages Jekyll bypass
+└── for-decision-makers/
+    ├── orkestra-tanitim.html    # 9-slide deck
+    └── orkestra-diagram.html    # interactive map at a glance
+```
+
+## Contributing
+
+This is a conceptual vision. Feedback is welcome:
+
+- **Architecture questions or suggestions** — [GitHub Issues](https://github.com/ibrahimSumbul/enterprise-ai-orchestra/issues)
+- **Typos / wording fixes** — open a PR directly
+- **Translations** — both Turkish and English are maintained; PRs improving either are welcome
+
+If you disagree with one of the design principles, open an Issue and let's discuss — patterns mature through critique.
+
+## License
+
+[CC BY-SA 4.0](LICENSE) — share, adapt, use commercially; give attribution + share alike.
+
+CC-BY-SA is a classic choice for architecture-vision documents: it encourages the idea to spread while requiring derivative works to stay equally open.
+
+## Who Wrote This?
+
+**İbrahim Sümbül** · AI Systems Engineer · Hybrid AI Architectures · KVKK/GDPR-aware Enterprise AI
+
+- GitHub: [github.com/ibrahimSumbul](https://github.com/ibrahimSumbul)
+- LinkedIn: [linkedin.com/in/ibrahim-sümbül](https://www.linkedin.com/in/ibrahim-s%C3%BCmb%C3%BCl-838800300)
+- Email: ibrahimsumbulll@gmail.com
+
+> Private implementation explorations of this pattern are pursued separately; the public repo shares only the generic architectural approach and system-design scope. Architecture deck and engineering deep-dive available on request — contact links above.

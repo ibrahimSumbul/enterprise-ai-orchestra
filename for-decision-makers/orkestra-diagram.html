@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Orkestranın Haritası — Tek Bakışta</title>
+<title data-title-tr="Orkestranın Haritası — Tek Bakışta" data-title-en="The Orchestra's Map — At a Glance">Orkestranın Haritası — Tek Bakışta</title>
+<!-- No-FOUC dil seçimi: ?lang → localStorage → navigator.language. Boyamadan önce html.en'i ayarlar. -->
+<script>
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search).get('lang');
+      var s = localStorage.getItem('eao-lang');
+      var lang = (q === 'en' || q === 'tr') ? q
+        : (s === 'en' || s === 'tr') ? s
+        : ((navigator.language || 'tr').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en');
+      var d = document.documentElement;
+      d.classList.toggle('en', lang === 'en');
+      d.setAttribute('lang', lang);
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
 <style>
   :root {
@@ -177,6 +192,20 @@
     .conductor { width: 150px; height: 150px; } .halo { width: 214px; height: 214px; }
     .node { padding: 13px 16px; } .row { gap: 9px; }
   }
+
+  /* ---------- Dil değiştirici (TR ⇄ EN) ---------- */
+  /* !important: tech-mode display kurallarıyla (body.tech .tnote/.layer-desc) eşit specificity
+     çakışmasını kesin çözer — gizli dilin .tnote/.layer-desc'i tech modunda da görünmesin. */
+  html:not(.en) [data-lang="en"] { display: none !important; }
+  html.en       [data-lang="tr"] { display: none !important; }
+  .langbtn {
+    position: fixed; top: 20px; left: 22px; z-index: 50; cursor: pointer;
+    background: var(--glass); border: 1px solid var(--glass-bd); color: var(--ink-2);
+    border-radius: 100px; padding: 9px 15px; font-size: 13px; font-family: inherit;
+    display: flex; align-items: center; gap: 7px; backdrop-filter: blur(10px); transition: all .25s;
+  }
+  .langbtn:hover { color: var(--ink); border-color: rgba(255,255,255,0.25); }
+  .langbtn i { font-size: 16px; color: var(--purple); }
 </style>
 </head>
 <body>
@@ -191,15 +220,20 @@
   <span style="--x:14%;--y:84%;--d:13s;--dl:2.4s"></span>
 </div>
 
-<button class="techbtn" id="techToggle"><i class="ti ti-code"></i> Teknik detay</button>
+<button class="langbtn" id="langToggle" type="button" aria-label="Switch language / Dili değiştir">
+  <i class="ti ti-language" aria-hidden="true"></i><span data-lang="tr">EN</span><span data-lang="en">TR</span>
+</button>
+
+<button class="techbtn" id="techToggle"><i class="ti ti-code"></i> <span data-lang="tr">Teknik detay</span><span data-lang="en">Technical detail</span></button>
 
 <div class="wrap">
 
   <div class="hero">
-    <div class="eyebrow reveal">Tek bakışta</div>
-    <h1 class="reveal">Orkestranın haritası</h1>
-    <p class="reveal">Bir soru sorulur. Aşağıdaki her şey, görünmeden, uyum içinde çalışır ve tek bir cevap döner. Daha derin görmek için sağ üstteki <b>Teknik detay</b> düğmesine bas — her katmanın altında açıklama ve protokol notları belirir, ana akış sabit kalır.</p>
-    <div class="scrollcue reveal">↓ kaydır</div>
+    <div class="eyebrow reveal"><span data-lang="tr">Tek bakışta</span><span data-lang="en">At a glance</span></div>
+    <h1 class="reveal"><span data-lang="tr">Orkestranın haritası</span><span data-lang="en">The orchestra's map</span></h1>
+    <p class="reveal" data-lang="tr">Bir soru sorarsın. Aşağıdaki her şey görünmeden, uyum içinde çalışır ve tek bir cevap döner. Daha derinine inmek için sağ üstteki <b>Teknik detay</b> düğmesine bas — her katmanın altında açıklama ve protokol notları belirir, ana akış sabit kalır.</p>
+    <p class="reveal" data-lang="en">Ask one question. Everything below works in harmony, out of sight, and a single answer comes back. To look deeper, press <b>Technical detail</b> at the top right — a description and protocol notes appear beneath each layer, while the main flow stays fixed.</p>
+    <div class="scrollcue reveal"><span data-lang="tr">↓ kaydır</span><span data-lang="en">↓ scroll</span></div>
   </div>
 
   <div class="map">
@@ -207,14 +241,15 @@
     <!-- KULLANICI -->
     <div class="gr reveal">
       <div class="info warm">
-        <button class="info-head"><i class="ti ti-user hi"></i><span class="info-title">Kullanıcı</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve rol.</p></div>
+        <button class="info-head"><i class="ti ti-user hi"></i><span class="info-title"><span data-lang="tr">Kullanıcı</span><span data-lang="en">User</span></span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p data-lang="tr">Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve bir rol.</p><p data-lang="en">The person using the system. They type whatever's on their mind in plain language, without learning any special command syntax. All it takes is an account and a role.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">KULLANICI — <b>tek soru, gündelik Türkçe</b></div><div class="tnote cap-tn">doğal dil girdisi (NL) · kimlik + rol</div>
-          <div class="layer-desc">Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve rol.</div>
+        <div class="tier-cap"><div class="k"><span data-lang="tr">KULLANICI — <b>tek soru, gündelik Türkçe</b></span><span data-lang="en">USER — <b>one question, plain language</b></span></div><div class="tnote cap-tn"><span data-lang="tr">doğal dil girdisi (NL) · kimlik + rol</span><span data-lang="en">natural-language input (NL) · identity + role</span></div>
+          <div class="layer-desc" data-lang="tr">Sistemi kullanan kişi. Aklındaki soruyu, özel bir komut dili öğrenmeden, gündelik Türkçeyle yazar. Tek gereken: bir hesap ve bir rol.</div>
+          <div class="layer-desc" data-lang="en">The person using the system. They type whatever's on their mind in plain language, without learning any special command syntax. All it takes is an account and a role.</div>
         </div>
-        <div class="row"><div class="node warm listener"><i class="ti ti-user"></i><div class="lbl"><span class="t">Kullanıcı</span></div></div></div>
+        <div class="row"><div class="node warm listener"><i class="ti ti-user"></i><div class="lbl"><span class="t"><span data-lang="tr">Kullanıcı</span><span data-lang="en">User</span></span></div></div></div>
       </div>
     </div>
 
@@ -223,16 +258,17 @@
     <!-- KANALLAR -->
     <div class="gr reveal">
       <div class="info warm">
-        <button class="info-head"><i class="ti ti-broadcast hi"></i><span class="info-title">Kanallar</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Orkestraya ulaşmanın yolları. Bilgisayardan panel, telefondan sohbet, ya da sistemin kendiliğinden gönderdiği bildirim. Hepsi aynı orkestraya bağlanır — yalnızca erişim biçimi değişir.</p></div>
+        <button class="info-head"><i class="ti ti-broadcast hi"></i><span class="info-title"><span data-lang="tr">Kanallar</span><span data-lang="en">Channels</span></span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p data-lang="tr">Orkestraya ulaşmanın yolları. Bilgisayardan panel, telefondan sohbet, ya da sistemin kendiliğinden gönderdiği bildirim. Hepsi aynı orkestraya bağlanır — değişen tek şey erişim biçimidir.</p><p data-lang="en">The ways to reach the orchestra. A dashboard on your computer, chat on your phone, or a notification the system sends on its own. All connect to the same orchestra — only how you reach it changes.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">KANALLAR — <b>nasıl erişilir</b></div><div class="tnote cap-tn">Katman 1 · Channel adapters (taşıyıcı, reasoning yok)</div>
-          <div class="layer-desc">Orkestraya ulaşmanın yolları. Bilgisayardan panel veya telefondan sohbet — kullanıcının dokunduğu yüzeyler. Sistem proaktif bildirim gönderirken Yatay Yardımcılar'daki <b>Bildirim ajanı</b> kararı verir, taşıma alttaki push/mail/SMS adapter'ları üstlenir.</div>
+        <div class="tier-cap"><div class="k"><span data-lang="tr">KANALLAR — <b>nasıl erişilir</b></span><span data-lang="en">CHANNELS — <b>how you reach it</b></span></div><div class="tnote cap-tn"><span data-lang="tr">Katman 1 · Channel adapters (taşıyıcı, reasoning yok)</span><span data-lang="en">Layer 1 · Channel adapters (transport, no reasoning)</span></div>
+          <div class="layer-desc" data-lang="tr">Orkestraya ulaşmanın yolları. Bilgisayardan panel veya telefondan sohbet — kullanıcının dokunduğu yüzeyler. Sistem proaktif bildirim gönderirken Yatay Yardımcılar'daki <b>Bildirim ajanı</b> kararı verir, taşıma alttaki push/mail/SMS adapter'ları üstlenir.</div>
+          <div class="layer-desc" data-lang="en">The ways to reach the orchestra. A dashboard on your computer or chat on your phone — the surfaces the user touches. When the system sends a proactive notification, the <b>Notification agent</b> in the Horizontal Helpers makes the decision, while the push/mail/SMS adapters below handle delivery.</div>
         </div>
         <div class="row around">
-          <div class="node warm"><i class="ti ti-layout-dashboard"></i><div class="lbl"><span class="t">Masaüstü panel</span><span class="s">tablo, görsel, detay</span><span class="tnote">Dashboard · Next.js RSC</span></div></div>
-          <div class="node warm"><i class="ti ti-message-circle"></i><div class="lbl"><span class="t">Sohbet</span><span class="s">hızlı soru-cevap</span><span class="tnote">WhatsApp / Teams / web</span></div></div>
+          <div class="node warm"><i class="ti ti-layout-dashboard"></i><div class="lbl"><span class="t"><span data-lang="tr">Masaüstü panel</span><span data-lang="en">Desktop dashboard</span></span><span class="s"><span data-lang="tr">tablo, görsel, detay</span><span data-lang="en">tables, charts, detail</span></span><span class="tnote">Dashboard · Next.js RSC</span></div></div>
+          <div class="node warm"><i class="ti ti-message-circle"></i><div class="lbl"><span class="t"><span data-lang="tr">Sohbet</span><span data-lang="en">Chat</span></span><span class="s"><span data-lang="tr">hızlı soru-cevap</span><span data-lang="en">quick Q&amp;A</span></span><span class="tnote">WhatsApp / Teams / web</span></div></div>
         </div>
       </div>
     </div>
@@ -242,16 +278,17 @@
     <!-- ORKESTRA ŞEFİ -->
     <div class="gr reveal">
       <div class="info hub">
-        <button class="info-head"><i class="ti ti-wand hi"></i><span class="info-title">Orkestra Şefi</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Tüm işi koordine eden akıl. Soruyu doğru gruba yollar, önceki konuşmaları hatırlar, kimin neyi görebileceğine karar verir ve her şeyi kayda geçirir. Kullanıcı yalnızca şefle konuşur.</p></div>
+        <button class="info-head"><i class="ti ti-wand hi"></i><span class="info-title"><span data-lang="tr">Orkestra Şefi</span><span data-lang="en">Conductor</span></span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p data-lang="tr">Tüm işi koordine eden akıl. Soruyu doğru gruba yollar, önceki konuşmaları hatırlar, kimin neyi görebileceğine karar verir ve her şeyi kayda geçirir. Kullanıcı yalnızca şefle konuşur.</p><p data-lang="en">The mind that coordinates all the work. It routes the question to the right section, remembers previous conversations, decides who can see what, and records everything. The user speaks only to the conductor.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">ORKESTRA ŞEFİ — <b>her şeyi yöneten akıl</b></div><div class="tnote cap-tn">Katman 2 · Orchestration</div>
-          <div class="layer-desc">Tüm işi koordine eden akıl. Soruyu doğru gruba yollar (<b>Router</b>), önceki konuşmaları hatırlar (<b>Continuum</b>: memory + mediator + pgvector), kimin neyi görebileceğine karar verir (<b>Guardrails</b>: input + access + output 3 bariyer), her şeyi kayda geçirir (<b>Audit</b>), kritik kararlar için onay kuyruğunu yönetir (<b>Approval Queue</b>). Kullanıcı yalnızca şefle konuşur.</div>
+        <div class="tier-cap"><div class="k"><span data-lang="tr">ORKESTRA ŞEFİ — <b>her şeyi yöneten akıl</b></span><span data-lang="en">CONDUCTOR — <b>the mind that directs everything</b></span></div><div class="tnote cap-tn"><span data-lang="tr">Katman 2 · Orchestration</span><span data-lang="en">Layer 2 · Orchestration</span></div>
+          <div class="layer-desc" data-lang="tr">Tüm işi koordine eden akıl. Soruyu doğru gruba yollar (<b>Router</b>), önceki konuşmaları hatırlar (<b>Continuum</b>: memory + mediator + pgvector), kimin neyi görebileceğine karar verir (<b>Guardrails</b>: input + access + output 3 bariyer), her şeyi kayda geçirir (<b>Audit</b>), kritik kararlar için onay kuyruğunu yönetir (<b>Approval Queue</b>). Kullanıcı yalnızca şefle konuşur.</div>
+          <div class="layer-desc" data-lang="en">The mind that coordinates all the work. It routes the question to the right section (<b>Router</b>), remembers previous conversations (<b>Continuum</b>: memory + mediator + pgvector), decides who can see what (<b>Guardrails</b>: input + access + output — 3 barriers), records everything (<b>Audit</b>), and manages an approval queue for critical decisions (<b>Approval Queue</b>). The user speaks only to the conductor.</div>
         </div>
         <div class="conductor-wrap">
           <div class="halo"></div>
-          <div class="conductor"><i class="ti ti-wand"></i><span class="t">Orkestra Şefi</span><span class="s">yönlendirir · hatırlar<br>yetkilendirir · kaydeder</span></div>
+          <div class="conductor"><i class="ti ti-wand"></i><span class="t"><span data-lang="tr">Orkestra Şefi</span><span data-lang="en">Conductor</span></span><span class="s"><span data-lang="tr">yönlendirir · hatırlar<br>yetkilendirir · kaydeder</span><span data-lang="en">routes · remembers<br>authorizes · records</span></span></div>
           <div class="tnote conductor-tn">Router · Continuum (memory + mediator + pgvector) · Guardrails (input/access/output) · Audit · Approval Queue</div>
         </div>
       </div>
@@ -262,26 +299,27 @@
     <!-- GRUPLAR -->
     <div class="gr reveal">
       <div class="info hub">
-        <button class="info-head"><i class="ti ti-users-group hi"></i><span class="info-title">Gruplar</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Her iş alanının uzman ekibi — İK, lojistik, finans... Her grupta tek bir işi iyi yapan birden çok küçük yardımcı bulunur. Kullanıcı bu detayı görmez; şef doğru grubu çağırır.</p></div>
+        <button class="info-head"><i class="ti ti-users-group hi"></i><span class="info-title"><span data-lang="tr">Gruplar</span><span data-lang="en">Sections</span></span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p data-lang="tr">Her iş alanının uzman ekibi — İK, lojistik, finans... Her grupta tek bir işi iyi yapan birden çok küçük yardımcı bulunur. Kullanıcı bu detayı görmez; şef doğru grubu çağırır.</p><p data-lang="en">The expert team for each business area — HR, logistics, finance... Each section has several small helpers, each good at one job. The user doesn't see this detail; the conductor calls the right section.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">GRUPLAR — <b>uzmanlık alanları</b></div><div class="tnote cap-tn">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</div>
-          <div class="layer-desc">Her iş alanının ana akıl yürütücüsü — İK, lojistik, finans, üretim, müşteri hizmetleri… Her grup bir <b>Domain Agent</b>'la (Sonnet — kompleks reasoning) temsil edilir. Domain Agent kullanıcı sorusunu anlar, doğru yardımcıları (Yatay + Veri ajanları) <b>A2A</b> ile çağırır, sentez yapar. Domain kapsamı ve genişleme sırası public görselin parçası değildir; gerçek uygulamada veri erişilebilirliği, entegrasyon yüzeyi, yetki modeli, insan onayı ihtiyacı, risk seviyesi ve kullanıcı etkisi gibi genel mühendislik kriterleriyle değerlendirilir.</div>
+        <div class="tier-cap"><div class="k"><span data-lang="tr">GRUPLAR — <b>uzmanlık alanları</b></span><span data-lang="en">SECTIONS — <b>areas of expertise</b></span></div><div class="tnote cap-tn"><span data-lang="tr">Katman 3 · Domain Agents (Sonnet) — her grup bir veya daha çok ajan</span><span data-lang="en">Layer 3 · Domain Agents (Sonnet) — one or more agents per section</span></div>
+          <div class="layer-desc" data-lang="tr">Her iş alanının ana akıl yürütücüsü — İK, lojistik, finans, üretim, müşteri hizmetleri… Her grup bir <b>Domain Agent</b>'la (Sonnet — kompleks reasoning) temsil edilir. Domain Agent kullanıcı sorusunu anlar, doğru yardımcıları (Yatay + Veri ajanları) <b>A2A</b> ile çağırır, sentez yapar. Domain kapsamı ve genişleme sırası public görselin parçası değildir; gerçek uygulamada veri erişilebilirliği, entegrasyon yüzeyi, yetki modeli, insan onayı ihtiyacı, risk seviyesi ve kullanıcı etkisi gibi genel mühendislik kriterleriyle değerlendirilir.</div>
+          <div class="layer-desc" data-lang="en">The main reasoner for each business area — HR, logistics, finance, production, customer service… Each section is represented by a <b>Domain Agent</b> (Sonnet — complex reasoning). The Domain Agent understands the user's question, calls the right helpers (Horizontal + Data agents) via <b>A2A</b>, and synthesizes. The choice of domains and the order of expansion aren't part of this public diagram; in a real implementation they're assessed against general engineering criteria such as data availability, integration surface, the permission model, the need for human approval, risk level, and user impact.</div>
         </div>
         <div class="row">
-          <div class="node grp"><i class="ti ti-users"></i><span class="t">İK</span></div>
-          <div class="node grp"><i class="ti ti-shopping-cart"></i><span class="t">Satın alma</span></div>
-          <div class="node grp"><i class="ti ti-stack-2"></i><span class="t">Talep & stok</span></div>
-          <div class="node grp"><i class="ti ti-truck-delivery"></i><span class="t">Lojistik</span></div>
-          <div class="node grp"><i class="ti ti-checklist"></i><span class="t">Kalite</span></div>
-          <div class="node grp"><i class="ti ti-businessplan"></i><span class="t">Satış</span></div>
-          <div class="node grp"><i class="ti ti-chart-bar"></i><span class="t">Karar destek</span></div>
-          <div class="node grp"><i class="ti ti-coin"></i><span class="t">Finans</span></div>
-          <div class="node grp"><i class="ti ti-tools"></i><span class="t">Üretim & op.</span></div>
-          <div class="node grp"><i class="ti ti-headset"></i><span class="t">Müşteri hizmetleri</span></div>
-          <div class="node grp"><i class="ti ti-speakerphone"></i><span class="t">Pazarlama</span></div>
-          <div class="node grp"><i class="ti ti-device-desktop"></i><span class="t">BT / iç sistemler</span></div>
+          <div class="node grp"><i class="ti ti-users"></i><span class="t"><span data-lang="tr">İK</span><span data-lang="en">HR</span></span></div>
+          <div class="node grp"><i class="ti ti-shopping-cart"></i><span class="t"><span data-lang="tr">Satın alma</span><span data-lang="en">Procurement</span></span></div>
+          <div class="node grp"><i class="ti ti-stack-2"></i><span class="t"><span data-lang="tr">Talep & stok</span><span data-lang="en">Demand &amp; stock</span></span></div>
+          <div class="node grp"><i class="ti ti-truck-delivery"></i><span class="t"><span data-lang="tr">Lojistik</span><span data-lang="en">Logistics</span></span></div>
+          <div class="node grp"><i class="ti ti-checklist"></i><span class="t"><span data-lang="tr">Kalite</span><span data-lang="en">Quality</span></span></div>
+          <div class="node grp"><i class="ti ti-businessplan"></i><span class="t"><span data-lang="tr">Satış</span><span data-lang="en">Sales</span></span></div>
+          <div class="node grp"><i class="ti ti-chart-bar"></i><span class="t"><span data-lang="tr">Karar destek</span><span data-lang="en">Decision support</span></span></div>
+          <div class="node grp"><i class="ti ti-coin"></i><span class="t"><span data-lang="tr">Finans</span><span data-lang="en">Finance</span></span></div>
+          <div class="node grp"><i class="ti ti-tools"></i><span class="t"><span data-lang="tr">Üretim & op.</span><span data-lang="en">Production &amp; ops</span></span></div>
+          <div class="node grp"><i class="ti ti-headset"></i><span class="t"><span data-lang="tr">Müşteri hizmetleri</span><span data-lang="en">Customer service</span></span></div>
+          <div class="node grp"><i class="ti ti-speakerphone"></i><span class="t"><span data-lang="tr">Pazarlama</span><span data-lang="en">Marketing</span></span></div>
+          <div class="node grp"><i class="ti ti-device-desktop"></i><span class="t"><span data-lang="tr">BT / iç sistemler</span><span data-lang="en">IT / internal systems</span></span></div>
         </div>
       </div>
     </div>
@@ -291,18 +329,19 @@
     <!-- YATAY YARDIMCILAR (Horizontal Agents) -->
     <div class="gr reveal">
       <div class="info hub">
-        <button class="info-head"><i class="ti ti-puzzle hi"></i><span class="info-title">Yatay Yardımcılar</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Birden fazla domain'in ortak ihtiyacı olan capability-bazlı uzmanlar. Bir kez yazılır, tüm gruplar için ortak servis olur. Akıl burada (brain); taşıyıcılar L1 kanalda (mouth).</p></div>
+        <button class="info-head"><i class="ti ti-puzzle hi"></i><span class="info-title"><span data-lang="tr">Yatay Yardımcılar</span><span data-lang="en">Horizontal Helpers</span></span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p data-lang="tr">Birden fazla domain'in ortak ihtiyacı olan capability-bazlı uzmanlar. Bir kez yazılır, tüm gruplar için ortak servis olur. Akıl burada (brain); taşıyıcılar L1 kanalda (mouth).</p><p data-lang="en">Capability-based specialists that several domains need in common. Written once, they become a shared service for all sections. The brain lives here; the carriers sit in the L1 channel (the mouth).</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">YATAY YARDIMCILAR — <b>cross-domain capability</b></div><div class="tnote cap-tn">Horizontal Agents (Haiku) · çoklu domain tarafından çağrılır</div>
-          <div class="layer-desc">Birden fazla domain'in ortak ihtiyacı olan, capability-bazlı yardımcılar. Bir kez yazılır, tüm grupların ortak servisi olur. <b>Brain</b> burada (akıl: NE / KİME / NE ZAMAN / HANGİ KANAL); <b>mouth</b> L1 Kanalda (taşıyıcı: tek API çağrısı). Notification Agent yukarıda "kime yarın 09:00'da hatırlatma" kararını verir, L1 Bildirim Kanalı sadece mesajı iletir.</div>
+        <div class="tier-cap"><div class="k"><span data-lang="tr">YATAY YARDIMCILAR — <b>cross-domain capability</b></span><span data-lang="en">HORIZONTAL HELPERS — <b>cross-domain capability</b></span></div><div class="tnote cap-tn"><span data-lang="tr">Horizontal Agents (Haiku) · çoklu domain tarafından çağrılır</span><span data-lang="en">Horizontal Agents (Haiku) · called by multiple domains</span></div>
+          <div class="layer-desc" data-lang="tr">Birden fazla domain'in ortak ihtiyacı olan, capability-bazlı yardımcılar. Bir kez yazılır, tüm grupların ortak servisi olur. <b>Brain</b> burada (akıl: NE / KİME / NE ZAMAN / HANGİ KANAL); <b>mouth</b> L1 Kanalda (taşıyıcı: tek API çağrısı). Notification Agent yukarıda "kime yarın 09:00'da hatırlatma" kararını verir, L1 Bildirim Kanalı sadece mesajı iletir.</div>
+          <div class="layer-desc" data-lang="en">Capability-based helpers that several domains need in common. Written once, they become a shared service for all sections. The <b>brain</b> is here (the reasoning: WHAT / TO WHOM / WHEN / WHICH CHANNEL); the <b>mouth</b> is in the L1 Channel (the carrier: a single API call). The Notification Agent up here decides "remind whom, tomorrow at 09:00", and the L1 Notification Channel just delivers the message.</div>
         </div>
         <div class="row">
-          <div class="node grp"><i class="ti ti-file-text"></i><span class="t">Doküman işleme</span></div>
-          <div class="node grp"><i class="ti ti-bell-ringing"></i><span class="t">Bildirim ajanı</span></div>
-          <div class="node grp"><i class="ti ti-search"></i><span class="t">RAG / Arama</span></div>
-          <div class="node grp"><i class="ti ti-language"></i><span class="t">Çeviri</span></div>
+          <div class="node grp"><i class="ti ti-file-text"></i><span class="t"><span data-lang="tr">Doküman işleme</span><span data-lang="en">Document processing</span></span></div>
+          <div class="node grp"><i class="ti ti-bell-ringing"></i><span class="t"><span data-lang="tr">Bildirim ajanı</span><span data-lang="en">Notification agent</span></span></div>
+          <div class="node grp"><i class="ti ti-search"></i><span class="t"><span data-lang="tr">RAG / Arama</span><span data-lang="en">RAG / Search</span></span></div>
+          <div class="node grp"><i class="ti ti-language"></i><span class="t"><span data-lang="tr">Çeviri</span><span data-lang="en">Translation</span></span></div>
           <div class="node grp"><i class="ti ti-scan"></i><span class="t">OCR</span></div>
         </div>
       </div>
@@ -313,29 +352,30 @@
     <!-- VERİ AJANLARI + ENSTRÜMANLAR -->
     <div class="gr reveal">
       <div class="info cool">
-        <button class="info-head"><i class="ti ti-database hi"></i><span class="info-title">Veri Ajanları + Enstrümanlar</span><i class="ti ti-chevron-down chev"></i></button>
-        <div class="info-body"><p>Her veri kaynağı kendi ajanıyla sarılır (Boundary Agent Doctrine). Üst sıra: Data-Layer Agent'lar — vendor başına ayrı, içeride MCP server. Alt sıra: federe veri kaynakları — yerinde kalır, kopyalanmaz.</p></div>
+        <button class="info-head"><i class="ti ti-database hi"></i><span class="info-title"><span data-lang="tr">Veri Ajanları + Enstrümanlar</span><span data-lang="en">Data Agents + Instruments</span></span><i class="ti ti-chevron-down chev"></i></button>
+        <div class="info-body"><p data-lang="tr">Her veri kaynağı kendi ajanıyla sarılır (Boundary Agent Doctrine). Üst sıra: Data-Layer Agent'lar — vendor başına ayrı, içeride MCP server. Alt sıra: federe veri kaynakları — yerinde kalır, kopyalanmaz.</p><p data-lang="en">Each data source is wrapped by its own agent (the Boundary Agent Doctrine). Top row: Data-Layer Agents — one per vendor, with an MCP server inside. Bottom row: federated data sources — they stay in place and aren't copied.</p></div>
       </div>
       <div class="content">
-        <div class="tier-cap"><div class="k">VERİ AJANLARI + ENSTRÜMANLAR — <b>federe, yerinde kalır</b></div><div class="tnote cap-tn">Üst: Data-Layer Agents (Haiku) + MCP server · Alt: federe veri kaynakları (ETL/ambar yok)</div>
-          <div class="layer-desc">Her vendor için <b>ayrı bir Data-Layer Agent + ayrı MCP server</b>. Vendor protokol farklılıkları (OData, REST, SOAP, Graph) ajanın içinde encapsule. Kullanıcı tek dilden konuşur, ajan kaynağa özgü dile çevirir. <b>Federe ilke:</b> veri kaynakta kalır, kopyalanmaz, ETL/ambar yok — soru sorulduğu an çağrılır.</div>
+        <div class="tier-cap"><div class="k"><span data-lang="tr">VERİ AJANLARI + ENSTRÜMANLAR — <b>federe, yerinde kalır</b></span><span data-lang="en">DATA AGENTS + INSTRUMENTS — <b>federated, stays in place</b></span></div><div class="tnote cap-tn"><span data-lang="tr">Üst: Data-Layer Agents (Haiku) + MCP server · Alt: federe veri kaynakları (ETL/ambar yok)</span><span data-lang="en">Top: Data-Layer Agents (Haiku) + MCP server · Bottom: federated data sources (no ETL/warehouse)</span></div>
+          <div class="layer-desc" data-lang="tr">Her vendor için <b>ayrı bir Data-Layer Agent + ayrı MCP server</b>. Vendor protokol farklılıkları (OData, REST, SOAP, Graph) ajanın içinde encapsule. Kullanıcı tek dilden konuşur, ajan kaynağa özgü dile çevirir. <b>Federe ilke:</b> veri kaynakta kalır, kopyalanmaz, ETL/ambar yok — soru sorulduğu an çağrılır.</div>
+          <div class="layer-desc" data-lang="en">A <b>separate Data-Layer Agent + separate MCP server</b> for each vendor. Vendor protocol differences (OData, REST, SOAP, Graph) are encapsulated inside the agent. The user speaks one language; the agent translates to each source's own dialect. <b>The federated principle:</b> data stays at the source, isn't copied, no ETL/warehouse — it's called the moment a question is asked.</div>
         </div>
         <div class="bus" style="margin-bottom: 12px;">
-          <span class="chip"><i class="ti ti-cpu"></i> ERP ajanı<span class="tnote">· OData V4</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> CRM ajanı<span class="tnote">· REST</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> Doküman ajanı<span class="tnote">· Graph</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> Envanter ajanı<span class="tnote">· REST</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> Telemetri ajanı<span class="tnote">· REST</span></span>
-          <span class="chip"><i class="ti ti-cpu"></i> Kalite ajanı<span class="tnote">· SOAP / REST</span></span>
-          <span class="chip"><i class="ti ti-dots"></i> ve diğerleri</span>
+          <span class="chip"><i class="ti ti-cpu"></i> <span data-lang="tr">ERP ajanı</span><span data-lang="en">ERP agent</span><span class="tnote">· OData V4</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> <span data-lang="tr">CRM ajanı</span><span data-lang="en">CRM agent</span><span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> <span data-lang="tr">Doküman ajanı</span><span data-lang="en">Document agent</span><span class="tnote">· Graph</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> <span data-lang="tr">Envanter ajanı</span><span data-lang="en">Inventory agent</span><span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> <span data-lang="tr">Telemetri ajanı</span><span data-lang="en">Telemetry agent</span><span class="tnote">· REST</span></span>
+          <span class="chip"><i class="ti ti-cpu"></i> <span data-lang="tr">Kalite ajanı</span><span data-lang="en">Quality agent</span><span class="tnote">· SOAP / REST</span></span>
+          <span class="chip"><i class="ti ti-dots"></i> <span data-lang="tr">ve diğerleri</span><span data-lang="en">and more</span></span>
         </div>
         <div class="bus">
-          <span class="chip"><i class="ti ti-box"></i> Sipariş & stok<span class="tnote">· ERP / OData V4</span></span>
+          <span class="chip"><i class="ti ti-box"></i> <span data-lang="tr">Sipariş & stok</span><span data-lang="en">Orders &amp; stock</span><span class="tnote">· ERP / OData V4</span></span>
           <span class="chip"><i class="ti ti-users-group"></i> CRM<span class="tnote">· REST API</span></span>
-          <span class="chip"><i class="ti ti-files"></i> Doküman arşivi<span class="tnote">· DMS / Graph</span></span>
-          <span class="chip"><i class="ti ti-clipboard-list"></i> Envanter<span class="tnote">· REST API</span></span>
-          <span class="chip"><i class="ti ti-truck"></i> Filo telemetri<span class="tnote">· REST API</span></span>
-          <span class="chip"><i class="ti ti-checklist"></i> Kalite & uygunluk<span class="tnote">· SOAP / REST</span></span>
+          <span class="chip"><i class="ti ti-files"></i> <span data-lang="tr">Doküman arşivi</span><span data-lang="en">Document archive</span><span class="tnote">· DMS / Graph</span></span>
+          <span class="chip"><i class="ti ti-clipboard-list"></i> <span data-lang="tr">Envanter</span><span data-lang="en">Inventory</span><span class="tnote">· REST API</span></span>
+          <span class="chip"><i class="ti ti-truck"></i> <span data-lang="tr">Filo telemetri</span><span data-lang="en">Fleet telemetry</span><span class="tnote">· REST API</span></span>
+          <span class="chip"><i class="ti ti-checklist"></i> <span data-lang="tr">Kalite & uygunluk</span><span data-lang="en">Quality &amp; compliance</span><span class="tnote">· SOAP / REST</span></span>
         </div>
       </div>
     </div>
@@ -343,13 +383,16 @@
   </div>
 
   <div class="legend reveal">
-    <span><span class="dotleg" style="background:var(--req)"></span> Soru — içeri</span>
-    <span><span class="dotleg" style="background:var(--ans)"></span> Cevap — geri</span>
+    <span><span class="dotleg" style="background:var(--req)"></span> <span data-lang="tr">Soru — içeri</span><span data-lang="en">Question — inbound</span></span>
+    <span><span class="dotleg" style="background:var(--ans)"></span> <span data-lang="tr">Cevap — geri</span><span data-lang="en">Answer — back</span></span>
     <span class="tnote">A2A (agent↔agent) · Service call (Continuum/Audit)</span>
   </div>
 
-  <p class="foot reveal">Veri kopyalanmaz, taşınmaz. Soru sorulduğu an çağrılır, birleştirilir, kullanıcıya <b>tek bir cevap</b> olarak döner. Tek tek araçlar değil — <b>birlikte çalan bir orkestra.</b>
+  <p class="foot reveal" data-lang="tr">Veri kopyalanmaz, taşınmaz. Soru sorulduğu an çağrılır, birleştirilir, kullanıcıya <b>tek bir cevap</b> olarak döner. Tek tek araçlar değil — <b>birlikte çalan bir orkestra.</b>
     <span class="tnote">Federe mimari: kaynaklar yerinde; her sorgu A2A + service call zinciriyle anlık çözülür. Merkezi veri ambarı / ETL yoktur.</span>
+  </p>
+  <p class="foot reveal" data-lang="en">Data isn't copied or moved. It's called the moment a question is asked, combined, and returned to the user as <b>a single answer</b>. Not individual tools — <b>an orchestra playing together.</b>
+    <span class="tnote">Federated architecture: sources stay in place; every query is resolved on the fly through an A2A + service-call chain. There is no central data warehouse / ETL.</span>
   </p>
 
 </div>
@@ -400,6 +443,36 @@
     const io = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.14 });
     items.forEach(function(el){ io.observe(el); });
   } else { items.forEach(function(el){ el.classList.add('in'); }); }
+
+  // ---------- Dil değiştirici (TR ⇄ EN) ----------
+  (function () {
+    var KEY = 'eao-lang';
+    var root = document.documentElement;
+    var titleEl = document.querySelector('title');
+
+    function current() { return root.classList.contains('en') ? 'en' : 'tr'; }
+
+    function apply(lang, persist) {
+      root.classList.toggle('en', lang === 'en');
+      root.setAttribute('lang', lang);
+      if (titleEl) {
+        var t = titleEl.getAttribute('data-title-' + lang);
+        if (t) titleEl.textContent = t;
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, lang); } catch (e) {}
+        var url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    apply(current(), false);
+
+    document.getElementById('langToggle').addEventListener('click', function () {
+      apply(current() === 'en' ? 'tr' : 'en', true);
+    });
+  })();
 </script>
 
 </body>
