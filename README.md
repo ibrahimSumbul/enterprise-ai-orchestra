@@ -17,7 +17,7 @@ Bu repo bir **kavramsal mimari vision** sunar — kod değil, fikir. Modern kuru
 
 | Doküman | Hedef kitle | Açıklama |
 |---|---|---|
-| [`orkestra-tanitim.html`](for-decision-makers/orkestra-tanitim.html) | Karar verici (CIO/CTO/operasyon yöneticisi) | 9 slayt, scroll-snap, klavye nav, light/dark mode auto, basıma uygun |
+| [`orkestra-tanitim.html`](for-decision-makers/orkestra-tanitim.html) | Karar verici (CIO/CTO/operasyon yöneticisi) | 9 slayt, scroll-snap, klavye nav, açık/koyu tema (oto + manuel), basıma uygun |
 | [`orkestra-diagram.html`](for-decision-makers/orkestra-diagram.html) | Mimari okuyucu | Tek bakışta interaktif harita, collapsible katman bilgisi, teknik detay toggle |
 
 **Canlı:** https://ibrahimsumbul.github.io/enterprise-ai-orchestra/
@@ -64,6 +64,7 @@ open for-decision-makers/orkestra-tanitim.html
 **Klavye:** `↑` `↓` slayt gez (tanıtım), `P` yazdır, `space` ilerle.
 **Teknik toggle:** Diyagramda sağ üstte "Teknik detay" düğmesi — kavramsal/teknik versiyonu değiştir.
 **Dil:** Her sayfada üst köşede `TR | EN` düğmesi — seçim hatırlanır ve `?lang=en` ile paylaşılabilir; ilk ziyarette tarayıcı diline göre otomatik açılır.
+**Tema:** Tanıtım sayfasında sağ üstte ☀️/🌙 düğmesi — açık/koyu tema; seçim hatırlanır, ilk ziyarette sistem tercihine uyar.
 
 ## Yapı
 
@@ -121,7 +122,7 @@ This repo presents a **conceptual architecture vision** — an idea, not code. T
 
 | Document | Audience | Description |
 |---|---|---|
-| [`orkestra-tanitim.html`](for-decision-makers/orkestra-tanitim.html) | Decision-maker (CIO/CTO/operations lead) | 9 slides, scroll-snap, keyboard nav, auto light/dark mode, print-friendly |
+| [`orkestra-tanitim.html`](for-decision-makers/orkestra-tanitim.html) | Decision-maker (CIO/CTO/operations lead) | 9 slides, scroll-snap, keyboard nav, light/dark mode (auto + manual), print-friendly |
 | [`orkestra-diagram.html`](for-decision-makers/orkestra-diagram.html) | Architecture reader | Interactive map at a glance, collapsible layer info, technical-detail toggle |
 
 **Live:** https://ibrahimsumbul.github.io/enterprise-ai-orchestra/
@@ -168,6 +169,7 @@ open for-decision-makers/orkestra-tanitim.html
 **Keyboard:** `↑` `↓` move between slides (deck), `P` print, `space` advance.
 **Technical toggle:** the "Technical detail" button at the top right of the diagram — switch between the conceptual and technical versions.
 **Language:** every page has a `TR | EN` button in the top corner — the choice is remembered and shareable via `?lang=en`; on first visit it follows the browser language automatically.
+**Theme:** the deck has a ☀️/🌙 button at the top right — light/dark; the choice is remembered and follows the system preference on first visit.
 
 ## Structure
 
