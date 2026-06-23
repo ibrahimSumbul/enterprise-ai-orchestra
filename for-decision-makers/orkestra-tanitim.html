@@ -19,9 +19,21 @@
     } catch (e) {}
   })();
 </script>
+<!-- No-FOUC tema: localStorage('eao-theme') tercihi → yoksa sistem (prefers-color-scheme). Boyamadan önce html.dark'ı ayarlar. -->
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('eao-theme');
+      var dark = stored === 'dark'
+        || (stored !== 'light' && !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+      document.documentElement.classList.toggle('dark', dark);
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.21.0/dist/tabler-icons.min.css">
 <style>
   :root {
+    color-scheme: light;
     --bg: #fbfaf7;
     --bg-2: #f4f3ee;
     --bg-3: #ebeae0;
@@ -38,24 +50,25 @@
     --gold-light: #F7EED7;
     --rose: #B25A5A;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1c1c1a;
-      --bg-2: #272725;
-      --bg-3: #2f2e29;
-      --text: #f1efe8;
-      --text-2: #d3d1c7;
-      --text-3: #908f88;
-      --border: rgba(255,255,255,0.14);
-      --border-2: rgba(255,255,255,0.30);
-      --accent: #AFA9EC;
-      --accent-light: #3C3489;
-      --blue: #85B7EB;
-      --blue-light: #0C447C;
-      --gold: #E0B65C;
-      --gold-light: #463713;
-      --rose: #D98A8A;
-    }
+  /* Koyu tema = manuel sınıf (html.dark). <head> IIFE eao-theme tercihini veya sistem
+     tercihini boyamadan önce çözüp sınıfı koyar (no-FOUC). JS kapalıysa varsayılan açık tema. */
+  html.dark {
+    color-scheme: dark;
+    --bg: #1c1c1a;
+    --bg-2: #272725;
+    --bg-3: #2f2e29;
+    --text: #f1efe8;
+    --text-2: #d3d1c7;
+    --text-3: #908f88;
+    --border: rgba(255,255,255,0.14);
+    --border-2: rgba(255,255,255,0.30);
+    --accent: #AFA9EC;
+    --accent-light: #3C3489;
+    --blue: #85B7EB;
+    --blue-light: #0C447C;
+    --gold: #E0B65C;
+    --gold-light: #463713;
+    --rose: #D98A8A;
   }
 
   * { box-sizing: border-box; }
@@ -206,10 +219,7 @@
   }
   .conductor-pill { background: var(--accent); color: #fff; box-shadow: 0 6px 20px rgba(83,74,183,0.28); }
   .listener-pill { background: var(--gold); color: #fff; box-shadow: 0 6px 20px rgba(176,125,30,0.28); }
-  @media (prefers-color-scheme: dark) {
-    .conductor-pill { color: #1c1c1a; }
-    .listener-pill { color: #1c1c1a; }
-  }
+  html.dark .conductor-pill, html.dark .listener-pill { color: #1c1c1a; }
   .conductor-pill i, .listener-pill i { font-size: 19px; }
   .spine { width: 2px; height: 22px; background: var(--border-2); margin: 6px auto; border-radius: 2px; }
   .spine-row { display: flex; justify-content: center; }
@@ -259,7 +269,7 @@
   .bubble { padding: 12px 16px; border-radius: 16px; font-size: 14.5px; margin-bottom: 10px; max-width: 85%; line-height: 1.5; }
   .bubble.me { background: var(--accent); color: #fff; margin-left: auto; border-bottom-right-radius: 5px; }
   .bubble.bot { background: var(--bg); border: 0.5px solid var(--border); color: var(--text); border-bottom-left-radius: 5px; }
-  @media (prefers-color-scheme: dark) { .bubble.me { color: #1c1c1a; } }
+  html.dark .bubble.me { color: #1c1c1a; }
   .bubble.bot b { color: var(--accent); font-weight: 600; }
   .chat-note { font-size: 12px; color: var(--text-3); margin: 4px 2px 0; text-align: center; }
 
@@ -315,23 +325,38 @@
   /* JS yoksa varsayılan = TR; EN gizli kalır. Kurallar print'te de geçerli (tek dil basılır). */
   html:not(.en) [data-lang="en"] { display: none; }
   html.en       [data-lang="tr"] { display: none; }
-  .langbtn {
-    position: fixed; top: 22px; left: 26px; z-index: 110;
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 7px 13px; border-radius: 100px;
+  /* İki sabit kontrol butonu (dil + tema) ortak gövdeyi paylaşır; yalnız konum/boyut/yazı farkı kalır. */
+  .langbtn, .themebtn {
+    position: fixed; top: 22px; z-index: 110;
+    display: inline-flex; align-items: center; border-radius: 100px;
     background: var(--bg-2); border: 0.5px solid var(--border); color: var(--text-2);
-    font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .5px;
     cursor: pointer; transition: border-color .2s, color .2s, transform .2s;
   }
-  .langbtn:hover { color: var(--text); border-color: var(--accent); transform: translateY(-1px); }
-  .langbtn i { font-size: 15px; color: var(--accent); }
-  @media print { .langbtn { display: none; } }
+  .langbtn { left: 26px; gap: 7px; padding: 7px 13px; font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .5px; }
+  .themebtn { right: 26px; justify-content: center; width: 36px; height: 36px; }
+  .langbtn:hover, .themebtn:hover { color: var(--text); border-color: var(--accent); transform: translateY(-1px); }
+  .langbtn:focus-visible, .themebtn:focus-visible,
+  .indicators a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .langbtn i, .themebtn i { color: var(--accent); }
+  .langbtn i { font-size: 15px; }
+  .themebtn i { font-size: 16px; }
+  .themebtn .ti-sun { display: none; }
+  html.dark .themebtn .ti-sun { display: inline-block; }
+  html.dark .themebtn .ti-moon { display: none; }
+  @media print { .langbtn, .themebtn { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .langbtn, .themebtn, .indicators a { transition: none; }
+    .langbtn:hover, .themebtn:hover { transform: none; }
+  }
 </style>
 </head>
 <body>
 
 <button class="langbtn" id="langToggle" type="button" aria-label="Switch language / Dili değiştir">
   <i class="ti ti-language" aria-hidden="true"></i><span data-lang="tr">EN</span><span data-lang="en">TR</span>
+</button>
+<button class="themebtn" id="themeToggle" type="button" aria-label="Koyu/açık tema değiştir / Toggle dark mode">
+  <i class="ti ti-moon" aria-hidden="true"></i><i class="ti ti-sun" aria-hidden="true"></i>
 </button>
 
 <div class="deck" id="deck">
@@ -729,6 +754,44 @@
     document.getElementById('langToggle').addEventListener('click', function () {
       apply(current() === 'en' ? 'tr' : 'en', true);
     });
+  })();
+</script>
+
+<script>
+  // ---------- Tema değiştirici (açık ⇄ koyu) ----------
+  (function () {
+    var KEY = 'eao-theme';
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+    function isDark() { return root.classList.contains('dark'); }
+    function sync() { btn.setAttribute('aria-pressed', isDark() ? 'true' : 'false'); }
+    sync();
+
+    btn.addEventListener('click', function () {
+      var dark = !isDark();
+      root.classList.toggle('dark', dark);
+      try { localStorage.setItem(KEY, dark ? 'dark' : 'light'); } catch (e) {}
+      sync();
+    });
+
+    // Kullanıcı tercih seçmemişse, sistem temasındaki değişimi canlı yansıt.
+    if (mq && mq.addEventListener) {
+      mq.addEventListener('change', function (e) {
+        var stored; try { stored = localStorage.getItem(KEY); } catch (x) {}
+        if (stored !== 'light' && stored !== 'dark') { root.classList.toggle('dark', e.matches); sync(); }
+      });
+    }
+
+    // Yazdırırken daima açık tema bas (koyu yüzeyler kâğıtta düşük kontrast + mürekkep israfı); sonra geri al.
+    function effectiveDark() {
+      var stored; try { stored = localStorage.getItem(KEY); } catch (e) {}
+      return stored === 'dark' || (stored !== 'light' && !!(mq && mq.matches));
+    }
+    window.addEventListener('beforeprint', function () { root.classList.remove('dark'); });
+    window.addEventListener('afterprint', function () { root.classList.toggle('dark', effectiveDark()); sync(); });
   })();
 </script>
 
